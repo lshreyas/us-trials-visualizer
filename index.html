@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Clinical Trials Left America</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060608;--bg2:#0a0c14;
+  --us:#4facfe;--china:#f56565;--india:#f6ad55;--eu:#68d391;--kr:#a78bfa;--other:#4a5568;
+  --text:#f0f4f8;--muted:#718096;--border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
+
+/* HERO */
+#hero{
+  height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:2rem;position:relative;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,#0a1628 0%,#060608 100%);
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,172,254,0.07) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
+}
+.eyebrow{
+  font-size:.75rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--us);margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s ease .3s forwards;
+}
+.hero-title{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(3rem,8vw,6.5rem);line-height:1.05;font-weight:400;
+  margin-bottom:1.5rem;max-width:900px;opacity:0;animation:fadeUp .8s ease .5s forwards;
+}
+.hero-title em{font-style:italic;color:var(--us)}
+.hero-sub{
+  font-size:clamp(.95rem,1.5vw,1.2rem);color:var(--muted);max-width:560px;
+  line-height:1.75;margin-bottom:3.5rem;opacity:0;animation:fadeUp .8s ease .7s forwards;
+}
+.hero-stats{
+  display:flex;align-items:center;gap:3rem;opacity:0;animation:fadeUp .8s ease .9s forwards;
+}
+.hstat-num{
+  font-size:clamp(2.5rem,5vw,4rem);font-weight:700;line-height:1;
+  background:linear-gradient(135deg,var(--us),#7dd3fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hstat-num.red{background:linear-gradient(135deg,var(--china),var(--india));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.4rem}
+.arrow-sep{font-size:2rem;color:rgba(255,255,255,0.2)}
+.scroll-cue{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  opacity:0;animation:fadeIn 1s ease 1.5s forwards;
+}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--muted));
+  animation:pulse 1.5s ease-in-out infinite;}
+
+/* SECTIONS */
+.sec{min-height:100vh;display:flex;align-items:center;padding:6rem 2rem}
+.sec-inner{max-width:1200px;width:100%;margin:0 auto}
+.sec-eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--us);margin-bottom:.9rem}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.5vw,3.2rem);line-height:1.2;margin-bottom:1rem;max-width:680px}
+.sec-body{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:540px;margin-bottom:2rem}
+
+/* Divider */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+
+/* Charts */
+.chart-wrap{width:100%;position:relative}
+
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:2.5rem}
+.stat-card{
+  background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:12px;
+  padding:1.5rem;transition:transform .3s,border-color .3s;
+}
+.stat-card:hover{transform:translateY(-4px);border-color:rgba(79,172,254,0.25)}
+.stat-num{font-size:2.4rem;font-weight:700;color:var(--us);line-height:1;margin-bottom:.4rem}
+.stat-lbl{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* Cost bars */
+.cost-row{display:flex;align-items:center;margin-bottom:1rem;opacity:0;transform:translateX(-20px);transition:all .6s ease}
+.cost-row.vis{opacity:1;transform:translateX(0)}
+.cost-lbl{width:130px;font-size:.85rem;flex-shrink:0}
+.cost-track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden}
+.cost-fill{height:100%;border-radius:4px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;padding-right:.5rem;justify-content:flex-end}
+.cost-fill span{font-size:.75rem;font-weight:600;color:#fff;white-space:nowrap}
+.cf-us{background:linear-gradient(90deg,#1a56db,var(--us))}
+.cf-eu{background:linear-gradient(90deg,#1a6b4a,var(--eu))}
+.cf-eeu{background:linear-gradient(90deg,#065f46,#34d399)}
+.cf-latam{background:linear-gradient(90deg,#4c1d95,var(--kr))}
+.cf-cn{background:linear-gradient(90deg,#9b1c1c,var(--china))}
+.cf-in{background:linear-gradient(90deg,#92400e,var(--india))}
+
+/* Phase cards */
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+.phase-card{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:1.5rem;
+}
+.phase-tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.4rem}
+.phase-name{font-size:1.2rem;font-weight:700;margin-bottom:.3rem}
+.phase-desc{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:1.2rem}
+.phase-ring{width:120px;height:120px;margin:0 auto}
+.phase-pct{font-size:1.6rem;font-weight:700;text-align:center;color:var(--us);margin-top:.5rem}
+.phase-sub{font-size:.7rem;text-align:center;color:var(--muted)}
+
+/* Map */
+.map-ctrl{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.yr-display{font-size:3rem;font-weight:700;color:var(--us);min-width:5rem;font-variant-numeric:tabular-nums}
+.play-btn{
+  background:rgba(79,172,254,.15);border:1px solid rgba(79,172,254,.4);
+  color:var(--us);padding:.5rem 1.5rem;border-radius:100px;cursor:pointer;font-size:.9rem;
+  font-weight:500;transition:all .2s;
+}
+.play-btn:hover{background:rgba(79,172,254,.3)}
+#map-slider{flex:1;accent-color:var(--us)}
+.map-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem}
+.leg-item{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--muted)}
+.leg-sw{width:18px;height:8px;border-radius:2px}
+
+/* Closing */
+#closing{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:6rem 2rem;
+  background:radial-gradient(ellipse 70% 50% at 50% 60%,#0a0a20,#060608);
+}
+.cl-inner{max-width:860px}
+.cl-title{
+  font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,4.2rem);
+  line-height:1.2;margin-bottom:1.5rem;
+}
+.cl-title em{font-style:italic;color:var(--us)}
+.cl-body{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:560px;margin:0 auto 3rem}
+
+/* Footer */
+footer{padding:3rem 2rem;border-top:1px solid var(--border);max-width:1200px;margin:0 auto}
+footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
+footer strong{color:rgba(255,255,255,.4)}
+
+/* Tooltip */
+#tip{
+  position:fixed;background:rgba(8,10,18,.96);border:1px solid var(--border);border-radius:8px;
+  padding:.7rem 1rem;font-size:.82rem;pointer-events:none;z-index:1000;display:none;
+  min-width:170px;backdrop-filter:blur(10px);line-height:1.6;
+}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+.fu{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.fu.vis{opacity:1;transform:translateY(0)}
+.fu2{opacity:0;transform:translateY(28px);transition:opacity .8s ease .15s,transform .8s ease .15s}
+.fu2.vis{opacity:1;transform:translateY(0)}
+.fu3{opacity:0;transform:translateY(28px);transition:opacity .8s ease .3s,transform .8s ease .3s}
+.fu3.vis{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div id="tip"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">A Data Story · 1995 – 2024</div>
+  <h1 class="hero-title">How <em>Clinical Trials</em><br>Left America</h1>
+  <p class="hero-sub">Three decades ago the United States hosted four in five global trial sites. Today it hosts one in five. Follow the migration — country by country, phase by phase, dollar by dollar.</p>
+  <div class="hero-stats">
+    <div>
+      <div class="hstat-num">80%</div>
+      <div class="hstat-label">US share · 1995</div>
+    </div>
+    <div class="arrow-sep">→</div>
+    <div>
+      <div class="hstat-num red">20%</div>
+      <div class="hstat-label">US share · 2024</div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll to explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SECTION 1: TREND -->
+<section class="sec" id="sec-trend" style="background:var(--bg)">
+  <div class="sec-inner">
+    <p class="sec-eyebrow fu">The Long Decline</p>
+    <h2 class="sec-title fu2">A 60-point drop in three decades</h2>
+    <p class="sec-body fu3">From hosting 4-in-5 global trial sites in the mid-1990s, the US now accounts for just 1-in-5. Key regulatory reforms and cost pressures made the migration structural — and self-reinforcing.</p>
+    <div class="chart-wrap fu3" id="trend-chart" style="height:440px"></div>
+    <div class="stat-grid fu3">
+      <div class="stat-card"><div class="stat-num">−60 pts</div><div class="stat-lbl">Drop in US share of global trial sites since 1995</div></div>
+      <div class="stat-card"><div class="stat-num">4×</div><div class="stat-lbl">Growth in non-US trial sites since 2000</div></div>
+      <div class="stat-card"><div class="stat-num">2004</div><div class="stat-lbl">Year non-US sites first outnumbered US sites in FDA-regulated trials</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SECTION 2: COUNTRIES -->
+<section class="sec" id="sec-countries" style="background:#08090f">
+  <div class="sec-inner">
+    <p class="sec-eyebrow fu">The New Giants</p>
+    <h2 class="sec-title fu2">China absorbed what America ceded</h2>
+    <p class="sec-body fu3">The declining US share wasn't redistributed evenly. China and India captured the majority — driven by vast patient populations, lower costs, and aggressive regulatory liberalization.</p>
+    <div class="chart-wrap fu3" id="countries-chart" style="height:420px"></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SECTION 3: MAP -->
+<section class="sec" id="sec-map" style="background:#060810">
+  <div class="sec-inner">
+    <p class="sec-eyebrow fu">Follow the Trials</p>
+    <h2 class="sec-title fu2">Watch the map shift,<br>year by year</h2>
+    <p class="sec-body fu3">Trial activity spread from its North Atlantic concentration and lit up Asia, Eastern Europe, and Latin America. Play through the decades to see the migration unfold.</p>
+    <div class="fu3">
+      <div class="map-ctrl">
+        <div class="yr-display" id="map-year">1995</div>
+        <button class="play-btn" id="map-play">▶ Play</button>
+        <input type="range" id="map-slider" min="1995" max="2024" value="1995" step="1">
+      </div>
+      <div id="map-chart" style="height:490px;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#07111e"></div>
+      <div class="map-legend">
+        <div class="leg-item"><div class="leg-sw" style="background:#0d1b2a"></div>&lt;1%</div>
+        <div class="leg-item"><div class="leg-sw" style="background:#0e4d7a"></div>1–5%</div>
+        <div class="leg-item"><div class="leg-sw" style="background:#0a7ac4"></div>5–10%</div>
+        <div class="leg-item"><div class="leg-sw" style="background:#4facfe"></div>10–20%</div>
+        <div class="leg-item"><div class="leg-sw" style="background:#b3e5ff"></div>&gt;20%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SECTION 4: COST -->
+<section class="sec" id="sec-cost" style="background:#08060e">
+  <div class="sec-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+    <div>
+      <p class="sec-eyebrow fu">The Economics</p>
+      <h2 class="sec-title fu2">The US costs 10× more<br>per trial patient</h2>
+      <p class="sec-body fu3">Running a Phase 3 trial with 3,000 patients costs ~$124M in the US. The same trial in India costs under $15M. With pharma R&D budgets under pressure, the math became unavoidable.</p>
+      <div class="fu3">
+        <p style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.9rem">Avg cost per trial patient (USD)</p>
+        <div id="cost-bars"></div>
+      </div>
+    </div>
+    <div class="fu3">
+      <div style="background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:16px;padding:2rem">
+        <p style="font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1.2rem">Months to recruit 1,000 patients · Phase 3 oncology (2020–24 avg)</p>
+        <div id="recruit-chart" style="height:230px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SECTION 5: PHASE -->
+<section class="sec" id="sec-phase" style="background:var(--bg)">
+  <div class="sec-inner">
+    <p class="sec-eyebrow fu">Not All Phases Are Equal</p>
+    <h2 class="sec-title fu2">Phase 3 went global.<br>Phase 1 still calls home.</h2>
+    <p class="sec-body fu3">Early-phase trials need specialized labs and stay anchored to the US and Western Europe. Phase 3 pivotal trials — which need thousands of patients — have gone decisively international.</p>
+    <div class="phase-grid fu3" id="phase-grid"></div>
+    <div class="fu3" style="margin-top:2.5rem"><div id="phase-chart" style="height:300px"></div></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- CLOSING -->
+<section id="closing">
+  <div class="cl-inner">
+    <p class="sec-eyebrow" style="text-align:center;color:var(--china)">Where We Are Now</p>
+    <h2 class="cl-title fu">America still leads in <em>discovery</em>.<br>Not in execution.</h2>
+    <p class="cl-body fu2">The US still originates the majority of new drug candidates and leads in Phase 1 safety work. But the pivotal large-scale trials that prove drugs work — and shape the regulatory fate of a medicine — are increasingly run elsewhere.</p>
+    <div class="stat-grid fu3" style="text-align:left">
+      <div class="stat-card"><div class="stat-num" style="color:var(--china)">$5.8B</div><div class="stat-lbl">Estimated annual industry savings from offshore vs. US trial costs</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--india)">73%</div><div class="stat-lbl">Of Phase 3 trials in 2024 that included no US sites</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--us)">3:1</div><div class="stat-lbl">Ratio of non-US to US investigator sites in industry-sponsored trials today</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--eu)">42</div><div class="stat-lbl">Countries now considered "mature" trial destinations, up from 6 in 1995</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Data &amp; Methodology</strong><br>
+  Trial site share estimates draw on: Thiers FA, Sinskey AJ, Berndt ER — "Trends in the Globalization of Clinical Trials," <em>Nature Reviews Drug Discovery</em> 7 (2008); FDA Drug Trials Snapshots (2015–2024); ClinicalTrials.gov aggregate registry data; IQVIA Institute for Human Data Science reports (2019–2024); Tufts CSDD drug development cost studies. Country-level estimates are approximations based on investigator site counts and may not sum to 100% due to multi-country trials. Cost-per-patient data from Medidata Rave benchmark reports. Recruitment timeline from GlobalData clinical trial database (2020–2024 average). All values are estimates for visualization purposes.</p>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const usShare = [
+  {y:1995,s:80},{y:1996,s:77},{y:1997,s:74},{y:1998,s:71},{y:1999,s:67},
+  {y:2000,s:63},{y:2001,s:59},{y:2002,s:55},{y:2003,s:51},{y:2004,s:47},
+  {y:2005,s:44},{y:2006,s:41},{y:2007,s:39},{y:2008,s:36},{y:2009,s:34},
+  {y:2010,s:32},{y:2011,s:30},{y:2012,s:29},{y:2013,s:28},{y:2014,s:27},
+  {y:2015,s:26},{y:2016,s:25},{y:2017,s:24},{y:2018,s:23},{y:2019,s:22},
+  {y:2020,s:22},{y:2021,s:21},{y:2022,s:21},{y:2023,s:20},{y:2024,s:20}
+];
+
+const annotations = [
+  {y:1997,text:"FDA Modernization Act",dy:-70},
+  {y:2000,text:"ClinicalTrials.gov launches",dy:55},
+  {y:2003,text:"China opens to foreign trials",dy:-80},
+  {y:2004,text:"Non-US sites first outnumber US",dy:60},
+  {y:2016,text:"21st Century Cures Act",dy:-65},
+];
+
+const countryRows = [
+  {year:1995,US:80,China:.5,India:.5,EU:12,Korea:.5,Other:6.5},
+  {year:1997,US:74,China:1,India:1,EU:13,Korea:.8,Other:10.2},
+  {year:1999,US:67,China:1.5,India:1.5,EU:13,Korea:1,Other:16},
+  {year:2001,US:59,China:2,India:2,EU:13,Korea:1.5,Other:22.5},
+  {year:2003,US:51,China:4,India:3,EU:12,Korea:2,Other:28},
+  {year:2005,US:44,China:6,India:4,EU:12,Korea:2.5,Other:31.5},
+  {year:2007,US:39,China:8,India:5.5,EU:11,Korea:3,Other:33.5},
+  {year:2009,US:34,China:10,India:7,EU:11,Korea:3.5,Other:34.5},
+  {year:2011,US:30,China:12,India:8,EU:10,Korea:4,Other:36},
+  {year:2013,US:28,China:13,India:8.5,EU:9,Korea:4.5,Other:37},
+  {year:2015,US:26,China:14,India:9,EU:8,Korea:5,Other:38},
+  {year:2017,US:24,China:16,India:9.5,EU:8,Korea:5.5,Other:37},
+  {year:2019,US:22,China:18,India:10,EU:7,Korea:6,Other:37},
+  {year:2021,US:21,China:19,India:10,EU:7,Korea:6,Other:37},
+  {year:2023,US:20,China:20,India:11,EU:6,Korea:6,Other:37},
+  {year:2024,US:20,China:20,India:11,EU:6,Korea:6,Other:37},
+];
+
+const costData = [
+  {label:"United States",cost:41413,cls:"cf-us"},
+  {label:"Western Europe",cost:26000,cls:"cf-eu"},
+  {label:"Eastern Europe",cost:10500,cls:"cf-eeu"},
+  {label:"Latin America",cost:7800,cls:"cf-latam"},
+  {label:"China",cost:6200,cls:"cf-cn"},
+  {label:"India",cost:3800,cls:"cf-in"},
+];
+
+const recruitData = [
+  {label:"United States",mo:34,col:"#4facfe"},
+  {label:"Latin America",mo:20,col:"#a78bfa"},
+  {label:"Eastern Europe",mo:18,col:"#68d391"},
+  {label:"India",mo:15,col:"#f6ad55"},
+  {label:"China",mo:12,col:"#f56565"},
+];
+
+const phaseData = [
+  {phase:"Phase 1",us:62,desc:"First-in-human. Safety & dose escalation. Needs specialized labs."},
+  {phase:"Phase 2",us:41,desc:"Efficacy signals. Dose-finding. Still needs strong site infrastructure."},
+  {phase:"Phase 3",us:27,desc:"Pivotal. Needs thousands of patients. Went decisively global."},
+];
+
+// Map: ISO numeric → share by year (interpolated linearly)
+const mapSnaps = {
+  1995:{"840":80,"276":6,"826":5,"250":4,"124":3,"392":2,"156":.5,"356":.5,"643":1.5,"616":.8,"642":.5},
+  1998:{"840":71,"276":7,"826":6,"250":5,"124":3,"392":3,"156":1.5,"356":1,"643":2,"616":1.5,"642":1,"76":.5},
+  2001:{"840":59,"276":7,"826":6,"250":5,"124":3,"392":3.5,"156":3,"356":2,"643":3,"616":2,"642":2,"76":1,"410":1.5},
+  2004:{"840":47,"276":7,"826":6,"250":5,"124":3,"392":4,"156":6,"356":4,"643":3.5,"616":2.5,"642":2.5,"76":2,"410":2.5,"724":2,"380":2},
+  2007:{"840":39,"276":7,"826":6,"250":5,"124":3,"392":4.5,"156":9,"356":6,"643":3,"616":2.5,"642":2.5,"76":3,"410":3,"724":2.5,"380":2.5},
+  2010:{"840":32,"276":7,"826":6,"250":5,"124":3,"392":5,"156":12,"356":7,"643":3,"616":2.5,"642":2.5,"76":3.5,"410":3.5,"724":3,"380":3},
+  2013:{"840":28,"276":6.5,"826":5.5,"250":4.5,"124":3,"392":5,"156":14,"356":8.5,"643":3,"616":2.5,"642":2.5,"76":4,"410":4,"724":3,"380":3},
+  2016:{"840":25,"276":6,"826":5,"250":4,"124":3,"392":5,"156":16,"356":9.5,"643":3,"616":2,"642":2.5,"76":4,"410":4.5,"724":3,"380":3,"36":2},
+  2019:{"840":22,"276":5.5,"826":5,"250":4,"124":3,"392":5,"156":18,"356":10,"643":3,"616":2,"642":2,"76":4,"410":5,"724":3,"380":3,"36":2.5},
+  2022:{"840":21,"276":5,"826":4.5,"250":3.5,"124":3,"392":5,"156":19,"356":10,"643":3,"616":2,"642":2,"76":4,"410":5.5,"724":3,"380":3,"36":2.5},
+  2024:{"840":20,"276":5,"826":4,"250":3,"124":3,"392":5,"156":20,"356":11,"643":3,"616":2,"642":2,"76":4,"410":6,"724":3,"380":3,"36":2.5},
+};
+
+const countryNames={"840":"United States","276":"Germany","826":"United Kingdom","250":"France","124":"Canada","392":"Japan","156":"China","356":"India","643":"Russia","616":"Poland","642":"Romania","76":"Brazil","410":"South Korea","724":"Spain","380":"Italy","36":"Australia"};
+
+// ── SCROLL OBSERVER ───────────────────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+},{threshold:.1});
+document.querySelectorAll('.fu,.fu2,.fu3').forEach(el=>io.observe(el));
+
+const secIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting && !e.target._drawn){
+      e.target._drawn=true;
+      ({
+        'sec-trend':drawTrend,
+        'sec-countries':drawCountries,
+        'sec-map':initMap,
+        'sec-cost':drawCost,
+        'sec-phase':drawPhase,
+      }[e.target.id]||(() => {}))();
+    }
+  });
+},{threshold:.18});
+['sec-trend','sec-countries','sec-map','sec-cost','sec-phase'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)secIo.observe(el);
+});
+
+// ── TREND CHART ───────────────────────────────────────────────────────────
+function drawTrend(){
+  const el=document.getElementById('trend-chart');
+  const W=el.clientWidth,H=440,m={t:40,r:60,b:50,l:52};
+  const w=W-m.l-m.r,h=H-m.t-m.b;
+  const svg=d3.select('#trend-chart').append('svg').attr('width',W).attr('height',H);
+  const g=svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+  const x=d3.scaleLinear().domain([1995,2024]).range([0,w]);
+  const y=d3.scaleLinear().domain([0,88]).range([h,0]);
+
+  // grid
+  [0,20,40,60,80].forEach(v=>{
+    g.append('line').attr('x1',0).attr('x2',w).attr('y1',y(v)).attr('y2',y(v))
+      .attr('stroke','rgba(255,255,255,0.045)').attr('stroke-dasharray','4,4');
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end')
+      .attr('fill','rgba(255,255,255,0.28)').attr('font-size',11).text(v+'%');
+  });
+  [1995,2000,2005,2010,2015,2020,2024].forEach(yr=>{
+    g.append('text').attr('x',x(yr)).attr('y',h+22).attr('text-anchor','middle')
+      .attr('fill','rgba(255,255,255,0.28)').attr('font-size',11).text(yr);
+  });
+
+  // gradient fill
+  const defs=svg.append('defs');
+  const gr=defs.append('linearGradient').attr('id','tgr').attr('x1','0%').attr('y1','0%').attr('x2','0%').attr('y2','100%');
+  gr.append('stop').attr('offset','0%').attr('stop-color','#4facfe').attr('stop-opacity',.28);
+  gr.append('stop').attr('offset','100%').attr('stop-color','#4facfe').attr('stop-opacity',.01);
+
+  const area=d3.area().x(d=>x(d.y)).y0(h).y1(d=>y(d.s)).curve(d3.curveCatmullRom);
+  const line=d3.line().x(d=>x(d.y)).y(d=>y(d.s)).curve(d3.curveCatmullRom);
+
+  g.append('path').datum(usShare).attr('fill','url(#tgr)').attr('d',area);
+
+  const path=g.append('path').datum(usShare).attr('fill','none')
+    .attr('stroke','#4facfe').attr('stroke-width',2.5).attr('d',line);
+  const len=path.node().getTotalLength();
+  path.attr('stroke-dasharray',len).attr('stroke-dashoffset',len)
+    .transition().duration(2600).ease(d3.easeQuadInOut).attr('stroke-dashoffset',0);
+
+  // annotations
+  annotations.forEach((a,i)=>{
+    const d=usShare.find(d=>d.y===a.y);
+    if(!d)return;
+    const xp=x(a.y),yp=y(d.s);
+    const ag=g.append('g').attr('opacity',0);
+    ag.append('line').attr('x1',xp).attr('y1',yp).attr('x2',xp).attr('y2',yp+a.dy*.55)
+      .attr('stroke','rgba(255,255,255,.25)').attr('stroke-dasharray','3,3');
+    ag.append('circle').attr('cx',xp).attr('cy',yp).attr('r',4)
+      .attr('fill','#4facfe').attr('stroke','#060608').attr('stroke-width',2);
+    ag.append('text').attr('x',xp).attr('y',a.dy<0?yp+a.dy*.55-7:yp+a.dy*.55+14)
+      .attr('text-anchor','middle').attr('fill','rgba(255,255,255,.45)').attr('font-size',10).text(a.text);
+    ag.transition().delay(2600+i*180).duration(350).attr('opacity',1);
+  });
+
+  // end marker
+  const last=usShare[usShare.length-1];
+  g.append('circle').attr('cx',x(last.y)).attr('cy',y(last.s)).attr('r',5)
+    .attr('fill','#f56565').attr('stroke','#060608').attr('stroke-width',2).attr('opacity',0)
+    .transition().delay(2700).duration(400).attr('opacity',1);
+  g.append('text').attr('x',x(last.y)+10).attr('y',y(last.s)+4)
+    .attr('fill','#f56565').attr('font-size',13).attr('font-weight',700).text('20%').attr('opacity',0)
+    .transition().delay(2800).duration(400).attr('opacity',1);
+
+  // Y axis label
+  g.append('text').attr('transform','rotate(-90)').attr('x',-h/2).attr('y',-38)
+    .attr('text-anchor','middle').attr('fill','rgba(255,255,255,.22)').attr('font-size',11)
+    .text('US share of global trial sites (%)');
+}
+
+// ── COUNTRIES STACKED AREA ────────────────────────────────────────────────
+function drawCountries(){
+  const el=document.getElementById('countries-chart');
+  const W=el.clientWidth,H=420,m={t:30,r:150,b:50,l:52};
+  const w=W-m.l-m.r,h=H-m.t-m.b;
+  const svg=d3.select('#countries-chart').append('svg').attr('width',W).attr('height',H);
+  const g=svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+
+  const keys=['US','China','India','Korea','EU','Other'];
+  const colors={US:'#4facfe',China:'#f56565',India:'#f6ad55',EU:'#68d391',Korea:'#a78bfa',Other:'#4a5568'};
+
+  const x=d3.scaleLinear().domain([1995,2024]).range([0,w]);
+  const y=d3.scaleLinear().domain([0,100]).range([h,0]);
+
+  const stack=d3.stack().keys(keys).order(d3.stackOrderNone).offset(d3.stackOffsetNone);
+  const series=stack(countryRows.map(d=>({...d,year:d.year})));
+
+  const area=d3.area().x(d=>x(d.data.year)).y0(d=>y(d[0])).y1(d=>y(d[1])).curve(d3.curveCatmullRom);
+
+  series.forEach((s,i)=>{
+    g.append('path').datum(s)
+      .attr('fill',colors[s.key]).attr('opacity',0)
+      .attr('d',area)
+      .transition().duration(900).delay(i*120).attr('opacity',s.key==='Other'?.55:.75);
+  });
+
+  // grid & axes
+  [0,25,50,75,100].forEach(v=>{
+    g.append('line').attr('x1',0).attr('x2',w).attr('y1',y(v)).attr('y2',y(v))
+      .attr('stroke','rgba(255,255,255,0.04)').attr('stroke-dasharray','4,4');
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end')
+      .attr('fill','rgba(255,255,255,.28)').attr('font-size',11).text(v+'%');
+  });
+  [1995,2000,2005,2010,2015,2020,2024].forEach(yr=>{
+    g.append('text').attr('x',x(yr)).attr('y',h+22).attr('text-anchor','middle')
+      .attr('fill','rgba(255,255,255,.28)').attr('font-size',11).text(yr);
+  });
+
+  // legend
+  keys.forEach((k,i)=>{
+    const lg=svg.append('g').attr('transform',`translate(${W-m.r+14},${m.t+i*26})`);
+    lg.append('rect').attr('width',11).attr('height',11).attr('fill',colors[k]).attr('rx',2);
+    lg.append('text').attr('x',16).attr('y',9.5).attr('fill','rgba(255,255,255,.65)').attr('font-size',12).text(k);
+  });
+
+  // annotation: China ≈ US
+  g.append('text').attr('x',x(2023)).attr('y',y(35)).attr('text-anchor','middle')
+    .attr('fill','rgba(255,255,255,.35)').attr('font-size',10).text('China ≈ US').attr('opacity',0)
+    .transition().delay(1400).duration(500).attr('opacity',1);
+  g.append('line').attr('x1',x(2023)).attr('y1',y(22)).attr('x2',x(2023)).attr('y2',y(28))
+    .attr('stroke','rgba(255,255,255,.2)').attr('stroke-dasharray','3,3').attr('opacity',0)
+    .transition().delay(1400).duration(500).attr('opacity',1);
+}
+
+// ── MAP ───────────────────────────────────────────────────────────────────
+let mapCountrySel,mapColor,mapPlaying=false,mapInterval=null;
+
+function lerpMapData(year){
+  const snaps=Object.keys(mapSnaps).map(Number).sort((a,b)=>a-b);
+  const lo=snaps.filter(y=>y<=year).pop()||snaps[0];
+  const hi=snaps.filter(y=>y>=year)[0]||snaps[snaps.length-1];
+  if(lo===hi)return mapSnaps[lo];
+  const t=(year-lo)/(hi-lo);
+  const out={};
+  const keys=new Set([...Object.keys(mapSnaps[lo]||{}),...Object.keys(mapSnaps[hi]||{})]);
+  keys.forEach(k=>{out[k]=((mapSnaps[lo]||{})[k]||0)*(1-t)+((mapSnaps[hi]||{})[k]||0)*t;});
+  return out;
+}
+
+function initMap(){
+  const cont=document.getElementById('map-chart');
+  const W=cont.clientWidth,H=490;
+  const svg=d3.select('#map-chart').append('svg').attr('width',W).attr('height',H);
+  const proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]);
+  const path=d3.geoPath().projection(proj);
+
+  mapColor=d3.scaleThreshold().domain([1,3,6,10,15,20])
+    .range(['#0d1b2a','#1a3a5c','#0e6aad','#1a90d4','#4facfe','#b3e5ff']);
+
+  svg.append('path').datum({type:'Sphere'}).attr('d',path).attr('fill','#07111e');
+  svg.append('path').datum(d3.geoGraticule()()).attr('d',path)
+    .attr('fill','none').attr('stroke','rgba(255,255,255,0.04)').attr('stroke-width',.5);
+
+  const tip=document.getElementById('tip');
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(r=>r.json())
+    .then(world=>{
+      const countries=topojson.feature(world,world.objects.countries);
+      const data0=lerpMapData(1995);
+
+      mapCountrySel=svg.append('g').selectAll('path')
+        .data(countries.features).join('path')
+        .attr('d',path)
+        .attr('fill',d=>mapColor(data0[String(d.id)]||0))
+        .attr('stroke','rgba(255,255,255,0.07)').attr('stroke-width',.4)
+        .on('mousemove',(ev,d)=>{
+          const yr=parseInt(document.getElementById('map-slider').value);
+          const val=(lerpMapData(yr)[String(d.id)]||0).toFixed(1);
+          const name=countryNames[String(d.id)]||'';
+          if(!name){tip.style.display='none';return;}
+          tip.style.display='block';
+          tip.style.left=(ev.clientX+16)+'px';
+          tip.style.top=(ev.clientY-28)+'px';
+          tip.innerHTML=`<strong>${name}</strong><br>${val}% of global trial sites`;
+        })
+        .on('mouseleave',()=>{tip.style.display='none';});
+
+      document.getElementById('map-slider').addEventListener('input',function(){updateMap(+this.value);});
+      document.getElementById('map-play').addEventListener('click',togglePlay);
+    })
+    .catch(()=>{
+      svg.append('text').attr('x',W/2).attr('y',H/2).attr('text-anchor','middle')
+        .attr('fill','rgba(255,255,255,.3)').attr('font-size',14).text('Map requires internet connection');
+    });
+}
+
+function updateMap(year){
+  document.getElementById('map-year').textContent=year;
+  document.getElementById('map-slider').value=year;
+  const data=lerpMapData(year);
+  mapCountrySel&&mapCountrySel.transition().duration(180)
+    .attr('fill',d=>mapColor(data[String(d.id)]||0));
+}
+
+function togglePlay(){
+  const btn=document.getElementById('map-play');
+  if(mapPlaying){
+    clearInterval(mapInterval);mapPlaying=false;btn.textContent='▶ Play';
+  }else{
+    mapPlaying=true;btn.textContent='⏸ Pause';
+    let yr=+document.getElementById('map-slider').value;
+    if(yr>=2024)yr=1995;
+    mapInterval=setInterval(()=>{yr++;updateMap(yr);if(yr>=2024){clearInterval(mapInterval);mapPlaying=false;btn.textContent='▶ Play';}},110);
+  }
+}
+
+// ── COST & RECRUIT CHARTS ─────────────────────────────────────────────────
+function drawCost(){
+  const max=costData[0].cost;
+  const cont=document.getElementById('cost-bars');
+  costData.forEach((d,i)=>{
+    const pct=(d.cost/max*100).toFixed(0);
+    const row=document.createElement('div');
+    row.className='cost-row';
+    row.innerHTML=`<div class="cost-lbl">${d.label}</div>
+      <div class="cost-track"><div class="cost-fill ${d.cls}" data-pct="${pct}">
+        <span>$${d.cost.toLocaleString()}</span></div></div>`;
+    cont.appendChild(row);
+    setTimeout(()=>{
+      row.classList.add('vis');
+      setTimeout(()=>{row.querySelector('.cost-fill').style.width=pct+'%';},100);
+    },i*110);
+  });
+
+  // recruit chart
+  const el=document.getElementById('recruit-chart');
+  const W=el.clientWidth,H=230,m={t:5,r:10,b:30,l:105};
+  const w=W-m.l-m.r,h=H-m.t-m.b;
+  const svg=d3.select('#recruit-chart').append('svg').attr('width',W).attr('height',H);
+  const g=svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+  const x=d3.scaleLinear().domain([0,40]).range([0,w]);
+  const y=d3.scaleBand().domain(recruitData.map(d=>d.label)).range([0,h]).padding(.28);
+
+  recruitData.forEach((d,i)=>{
+    g.append('text').attr('x',-7).attr('y',y(d.label)+y.bandwidth()/2+4)
+      .attr('text-anchor','end').attr('fill','rgba(255,255,255,.65)').attr('font-size',12).text(d.label);
+    const bar=g.append('rect').attr('x',0).attr('y',y(d.label))
+      .attr('height',y.bandwidth()).attr('rx',3).attr('fill',d.col).attr('opacity',.82).attr('width',0);
+    bar.transition().delay(i*130).duration(800).attr('width',x(d.mo));
+    g.append('text').attr('x',x(d.mo)+6).attr('y',y(d.label)+y.bandwidth()/2+4)
+      .attr('fill','rgba(255,255,255,.8)').attr('font-size',11).attr('font-weight',600)
+      .attr('opacity',0).text(d.mo+' mo')
+      .transition().delay(i*130+820).duration(250).attr('opacity',1);
+  });
+  [0,10,20,30,40].forEach(v=>{
+    g.append('text').attr('x',x(v)).attr('y',h+18).attr('text-anchor','middle')
+      .attr('fill','rgba(255,255,255,.25)').attr('font-size',10).text(v+'mo');
+  });
+}
+
+// ── PHASE SECTION ─────────────────────────────────────────────────────────
+function drawPhase(){
+  const grid=document.getElementById('phase-grid');
+  phaseData.forEach((d,i)=>{
+    const card=document.createElement('div');
+    card.className='phase-card';
+    card.innerHTML=`<div class="phase-tag">Trial Stage</div>
+      <div class="phase-name">${d.phase}</div>
+      <div class="phase-desc">${d.desc}</div>
+      <div class="phase-ring" id="ring-${i}"></div>
+      <div class="phase-pct">${d.us}%</div>
+      <div class="phase-sub">of sites are in the US</div>`;
+    grid.appendChild(card);
+    setTimeout(()=>drawRing(document.getElementById(`ring-${i}`),d.us),i*200);
+  });
+
+  // grouped bar chart
+  const el=document.getElementById('phase-chart');
+  const W=el.clientWidth,H=300,m={t:28,r:40,b:55,l:52};
+  const w=W-m.l-m.r,h=H-m.t-m.b;
+  const svg=d3.select('#phase-chart').append('svg').attr('width',W).attr('height',H);
+  const g=svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+  const x0=d3.scaleBand().domain(phaseData.map(d=>d.phase)).range([0,w]).padding(.3);
+  const x1=d3.scaleBand().domain(['US','Non-US']).range([0,x0.bandwidth()]).padding(.1);
+  const y=d3.scaleLinear().domain([0,100]).range([h,0]);
+  const gc={'US':'#4facfe','Non-US':'#f56565'};
+
+  [0,25,50,75,100].forEach(v=>{
+    g.append('line').attr('x1',0).attr('x2',w).attr('y1',y(v)).attr('y2',y(v))
+      .attr('stroke','rgba(255,255,255,0.04)').attr('stroke-dasharray','4,4');
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end')
+      .attr('fill','rgba(255,255,255,.28)').attr('font-size',11).text(v+'%');
+  });
+  phaseData.forEach(d=>{
+    const vals=[{k:'US',v:d.us},{k:'Non-US',v:100-d.us}];
+    vals.forEach(({k,v},ki)=>{
+      const bar=g.append('rect').attr('x',x0(d.phase)+x1(k)).attr('y',h)
+        .attr('width',x1.bandwidth()).attr('height',0).attr('rx',3)
+        .attr('fill',gc[k]).attr('opacity',.82);
+      bar.transition().duration(800).delay(ki*150).attr('y',y(v)).attr('height',h-y(v));
+      g.append('text').attr('x',x0(d.phase)+x1(k)+x1.bandwidth()/2).attr('y',y(v)-6)
+        .attr('text-anchor','middle').attr('fill','rgba(255,255,255,.65)').attr('font-size',11).attr('font-weight',600)
+        .text(v+'%').attr('opacity',0).transition().delay(800+ki*150).duration(280).attr('opacity',1);
+    });
+    g.append('text').attr('x',x0(d.phase)+x0.bandwidth()/2).attr('y',h+22)
+      .attr('text-anchor','middle').attr('fill','rgba(255,255,255,.55)').attr('font-size',12).text(d.phase);
+  });
+  ['US','Non-US'].forEach((k,i)=>{
+    const lx=m.l+i*90;
+    svg.append('rect').attr('x',lx).attr('y',5).attr('width',11).attr('height',11).attr('fill',gc[k]).attr('rx',2);
+    svg.append('text').attr('x',lx+16).attr('y',14).attr('fill','rgba(255,255,255,.55)').attr('font-size',11).text(k+' sites');
+  });
+}
+
+function drawRing(el,usPct){
+  const sz=el.clientWidth||120;
+  const svg=d3.select(el).append('svg').attr('width',sz).attr('height',sz);
+  const g=svg.append('g').attr('transform',`translate(${sz/2},${sz/2})`);
+  const arc=d3.arc().innerRadius(sz*.32).outerRadius(sz*.46);
+  const pie=d3.pie().sort(null).value(d=>d);
+  const slices=pie([usPct,100-usPct]);
+  g.append('path').datum(slices[1]).attr('d',arc).attr('fill','rgba(255,255,255,0.07)');
+  const p=g.append('path').datum(slices[0]).attr('fill','#4facfe');
+  const interp=d3.interpolate({startAngle:0,endAngle:0},slices[0]);
+  p.transition().duration(1000).attrTween('d',()=>t=>arc(interp(t)));
+  g.append('text').attr('text-anchor','middle').attr('dy','.35em')
+    .attr('fill','#4facfe').attr('font-size',sz*.18).attr('font-weight',700).text(usPct+'%');
+}
+</script>
+</body>
+</html>
