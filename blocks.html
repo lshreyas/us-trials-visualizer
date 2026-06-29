@@ -8,77 +8,58 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  /* Default palette = COOL (cool sophisticated) */
-  --bg:#0c1220;--bg2:#0a0c14;
-  --us:#38bdf8;--china:#ec4899;--india:#fb923c;--eu:#34d399;
-  --ee:#2dd4bf;--latam:#a78bfa;--kr:#facc15;--other:#475569;
-  --us-glow:56,189,248;
-  --china-glow:236,72,153;
-  --india-glow:251,146,60;
-  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#0f1a30 0%,#0c1220 100%);
-  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#1a1230,#0c1220);
-  --text:#f0f4f8;--muted:#94a3b8;--border:rgba(255,255,255,0.07);
-  --accent-grad:linear-gradient(135deg,var(--us),#7dd3fc);
-  --shift-grad:linear-gradient(135deg,var(--china),var(--india));
-}
-/* WARM palette */
-body.palette-warm{
-  --bg:#1a1612;--bg2:#221c16;
-  --us:#f0e6d2;--china:#b91c1c;--india:#d97706;--eu:#166534;
-  --ee:#047857;--latam:#7c3aed;--kr:#ea580c;--other:#44403c;
-  --us-glow:240,230,210;
-  --china-glow:185,28,28;
-  --india-glow:217,119,6;
-  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#2a2018 0%,#1a1612 100%);
-  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#2a1818,#1a1612);
-  --text:#f5ede0;--muted:#a8998a;--border:rgba(240,230,210,0.08);
-  --accent-grad:linear-gradient(135deg,#f0e6d2,#fff8e7);
-  --shift-grad:linear-gradient(135deg,var(--china),var(--india));
-}
-/* MONO + 2 accents palette */
-body.palette-mono{
-  --bg:#0a0a0c;--bg2:#101013;
-  --us:#cbd5e1;--china:#f59e0b;--india:#71717a;--eu:#52525b;
-  --ee:#52525b;--latam:#52525b;--kr:#52525b;--other:#3f3f46;
-  --us-glow:203,213,225;
-  --china-glow:245,158,11;
-  --india-glow:113,113,122;
-  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#16161a 0%,#0a0a0c 100%);
-  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#1f1a10,#0a0a0c);
-  --text:#f4f4f5;--muted:#71717a;--border:rgba(255,255,255,0.06);
-  --accent-grad:linear-gradient(135deg,#cbd5e1,#f1f5f9);
-  --shift-grad:linear-gradient(135deg,#f59e0b,#fbbf24);
+  /* NYT/Upshot-inspired editorial palette on warm paper */
+  --bg:#ece4d2;        /* paper cream */
+  --bg2:#e3dac4;       /* slightly deeper cream */
+  --text:#1f1b16;      /* warm ink */
+  --muted:#7a7060;     /* warm gray */
+  --border:rgba(31,27,22,.14);
+  --rule:rgba(31,27,22,.22);
+
+  --us:#2c4055;        /* deep slate */
+  --china:#b04a3a;     /* terracotta */
+  --india:#c89248;     /* ochre */
+  --eu:#6e8049;        /* olive sage */
+  --ee:#4e7a7e;        /* dusty teal */
+  --latam:#7a4c5e;     /* dusty plum */
+  --kr:#8a7240;        /* mustard */
+  --other:#a39884;     /* warm gray */
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden;transition:background .5s ease,color .5s ease}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden}
 ::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
+::-webkit-scrollbar-thumb{background:rgba(31,27,22,.18);border-radius:4px}
 
 /* HERO */
 #hero{
   height:100vh;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;padding:2rem;position:relative;
-  background:var(--hero-bg);
-  overflow:hidden;transition:background .5s ease;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,#f1eadc 0%,#ece4d2 100%);
+  overflow:hidden;
 }
 .eyebrow{
-  font-size:.75rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--us);margin-bottom:1.5rem;
+  font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--china);margin-bottom:1.8rem;
 }
 .hero-title{
   font-family:'DM Serif Display',Georgia,serif;
-  font-size:clamp(2.6rem,7vw,5.5rem);line-height:1.05;font-weight:400;
-  margin-bottom:1.5rem;max-width:900px;
+  font-size:clamp(2.6rem,6.5vw,5rem);line-height:1.08;font-weight:400;
+  margin-bottom:1.5rem;max-width:920px;color:var(--text);
 }
-.hero-title em{font-style:italic;color:var(--us)}
+.hero-title em{font-style:italic;color:var(--china)}
 .hero-sub{
-  font-size:clamp(.95rem,1.4vw,1.15rem);color:var(--muted);max-width:580px;
+  font-size:clamp(.95rem,1.3vw,1.1rem);color:var(--muted);max-width:580px;
   line-height:1.8;margin-bottom:3rem;
 }
+.byline{
+  font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;
+  margin-bottom:1.2rem;
+}
+.byline::before,.byline::after{content:'';display:inline-block;width:24px;height:1px;background:var(--rule);margin:0 .8rem;vertical-align:middle}
 .scroll-cue{
   position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;
 }
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--muted));
   animation:pulse 1.5s ease-in-out infinite;}
@@ -87,83 +68,75 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #stage-wrap{position:relative;background:var(--bg)}
 #stage{
   position:sticky;top:0;height:100vh;width:100%;
-  display:grid;grid-template-columns:1fr 480px;gap:2rem;
-  padding:4rem 5rem;align-items:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3.5rem 3rem;gap:2rem;
 }
 
-/* Left: narration */
-.narration{max-width:520px}
+/* Header row: year + narrative side-by-side */
+.stage-header{
+  display:grid;grid-template-columns:200px 1fr;gap:3rem;align-items:flex-start;
+  max-width:1200px;width:100%;
+}
+.year-block{border-top:2px solid var(--rule);padding-top:.7rem}
 .year-display{
-  font-family:'DM Serif Display',serif;font-size:clamp(4rem,8vw,7rem);line-height:1;
-  background:var(--accent-grad);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:.3rem;font-variant-numeric:tabular-nums;
-  transition:background .8s ease;
+  font-family:'DM Serif Display',serif;font-size:clamp(3.2rem,5.5vw,4.6rem);line-height:1;
+  color:var(--text);margin-bottom:.4rem;font-variant-numeric:tabular-nums;font-weight:400;
 }
-.year-display.shift{background:var(--shift-grad);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.year-sub{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;margin-bottom:2rem}
+.year-display.shift{color:var(--china)}
+.year-sub{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em}
+
+.narration{max-width:680px;border-top:2px solid var(--rule);padding-top:.7rem}
+.narr-tag{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;margin-bottom:.7rem}
 .narr-title{
-  font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.25;
-  margin-bottom:1rem;min-height:5rem;
+  font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,2vw,1.7rem);line-height:1.3;
+  margin-bottom:.8rem;min-height:4rem;color:var(--text);font-weight:400;
 }
-.narr-body{font-size:.95rem;color:var(--muted);line-height:1.75;min-height:7rem}
-.narr-title em{color:var(--us);font-style:italic}
+.narr-body{font-size:.92rem;color:var(--text);opacity:.78;line-height:1.7;min-height:5rem;max-width:580px}
+.narr-title em{color:var(--us);font-style:italic;font-weight:400}
 .narr-title em.red{color:var(--china)}
 
-/* Right: grid + legend */
-.right-col{display:flex;flex-direction:column;align-items:flex-start;gap:1.5rem}
-.grid-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
+/* Ribbon grid + legend */
+.ribbon-wrap{max-width:1200px;width:100%}
+.grid-label{
+  font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;
+  margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;
+}
 .grid-label strong{color:var(--text);font-weight:600}
 #block-grid{
-  display:grid;grid-template-columns:repeat(10,1fr);gap:9px;
-  width:440px;height:440px;
-  padding:6px;
+  display:grid;grid-template-columns:repeat(50,1fr);gap:3px;
+  width:100%;aspect-ratio:5/1;
 }
 .block{
-  border-radius:5px;background:var(--us);position:relative;
-  transition:background-color .9s cubic-bezier(.4,0,.2,1),
-             box-shadow .9s cubic-bezier(.4,0,.2,1),
-             transform .6s cubic-bezier(.4,0,.2,1);
-  /* inner sheen: subtle highlight top-left, darker bottom-right */
-  background-image:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 45%,rgba(0,0,0,.2) 100%);
-  background-blend-mode:overlay;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    inset 0 -1px 0 rgba(0,0,0,.25),
-    0 2px 6px rgba(0,0,0,.35);
+  border-radius:2px;background:var(--us);position:relative;
+  transition:background-color .9s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 1px 1px rgba(31,27,22,.08), inset 0 0 0 0.5px rgba(0,0,0,.06);
 }
-.block.us{background-color:var(--us);box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.25),
-    inset 0 -1px 0 rgba(0,0,0,.2),
-    0 2px 8px rgba(0,0,0,.4),
-    0 0 14px rgba(var(--us-glow),.35);}
-.block.china{background-color:var(--china);box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.25),
-    0 2px 8px rgba(0,0,0,.4),
-    0 0 16px rgba(var(--china-glow),.45);}
-.block.india{background-color:var(--india);box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.2),
-    inset 0 -1px 0 rgba(0,0,0,.25),
-    0 2px 7px rgba(0,0,0,.4),
-    0 0 14px rgba(var(--india-glow),.4);}
+.block.us{background-color:var(--us)}
+.block.china{background-color:var(--china)}
+.block.india{background-color:var(--india)}
 .block.eu{background-color:var(--eu)}
 .block.ee{background-color:var(--ee)}
 .block.latam{background-color:var(--latam)}
 .block.kr{background-color:var(--kr)}
 .block.other{background-color:var(--other)}
 
-/* Legend */
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;width:440px}
-.leg-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.78rem;
+/* Legend — horizontal row beneath ribbon */
+.legend{
+  display:flex;flex-wrap:wrap;gap:1.3rem 2rem;
+  margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid var(--border);
+  width:100%;
 }
-.leg-l{display:flex;align-items:center;gap:.55rem}
-.leg-sw{width:11px;height:11px;border-radius:2px}
-.leg-name{color:var(--text)}
-.leg-count{color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600;font-size:.85rem}
+.leg-row{
+  display:flex;align-items:baseline;gap:.55rem;
+  font-size:.78rem;
+}
+.leg-l{display:flex;align-items:baseline;gap:.45rem}
+.leg-sw{width:11px;height:11px;border-radius:2px;flex-shrink:0;transform:translateY(1px)}
+.leg-name{color:var(--text);font-weight:500}
+.leg-count{
+  color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600;font-size:.82rem;
+  margin-left:.2rem;
+}
 .leg-count.up{color:var(--china)}
 .leg-count.down{color:var(--us)}
 
@@ -177,53 +150,35 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #outro{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:6rem 2rem;
-  background:var(--outro-bg);transition:background .5s ease;
+  background:radial-gradient(ellipse 70% 50% at 50% 60%,#e8dfc8,#ece4d2);
 }
 .cl-inner{max-width:860px}
 .cl-title{
-  font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,4rem);
-  line-height:1.2;margin-bottom:1.5rem;
+  font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,4.5vw,3.6rem);
+  line-height:1.25;margin-bottom:1.5rem;color:var(--text);font-weight:400;
 }
 .cl-title em{font-style:italic;color:var(--china)}
-.cl-body{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:560px;margin:0 auto 3rem}
+.cl-body{font-size:1rem;color:var(--text);opacity:.78;line-height:1.8;max-width:580px;margin:0 auto 3rem}
 .back-link{
-  display:inline-block;color:var(--us);font-size:.85rem;text-decoration:none;
-  padding:.7rem 1.6rem;border:1px solid rgba(79,172,254,.35);border-radius:100px;
-  transition:all .2s;
+  display:inline-block;color:var(--text);font-size:.78rem;text-decoration:none;
+  padding:.75rem 1.7rem;border:1px solid var(--rule);border-radius:100px;
+  transition:all .2s;text-transform:uppercase;letter-spacing:.16em;font-weight:500;
 }
-.back-link:hover{background:rgba(79,172,254,.1);transform:translateY(-1px)}
+.back-link:hover{background:rgba(31,27,22,.06);border-color:var(--text)}
 
 footer{padding:3rem 2rem;border-top:1px solid var(--border);max-width:1200px;margin:0 auto;text-align:center}
-footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
+footer p{font-size:.7rem;color:var(--muted);line-height:1.8}
 
 @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
 
-/* Palette switcher */
-.palette-switcher{
-  position:fixed;top:1.2rem;right:1.2rem;z-index:200;
-  display:flex;gap:.4rem;padding:.45rem;
-  background:rgba(8,10,18,.7);backdrop-filter:blur(14px);
-  border:1px solid var(--border);border-radius:100px;
-}
-.pal-btn{
-  display:flex;align-items:center;gap:.4rem;
-  padding:.4rem .8rem;border:none;background:transparent;cursor:pointer;
-  border-radius:100px;color:var(--muted);font-family:inherit;font-size:.72rem;
-  text-transform:uppercase;letter-spacing:.1em;font-weight:600;
-  transition:all .25s ease;
-}
-.pal-btn:hover{color:var(--text)}
-.pal-btn.active{background:rgba(255,255,255,.08);color:var(--text)}
-.pal-swatches{display:flex;gap:2px}
-.pal-sw{width:8px;height:8px;border-radius:50%}
-
 /* Responsive */
-@media (max-width:1000px){
-  #stage{grid-template-columns:1fr;padding:3rem 2rem;gap:1.5rem;height:auto;min-height:100vh}
-  #block-grid{width:min(440px,82vw);height:min(440px,82vw)}
-  .legend{width:min(440px,82vw)}
-  .palette-switcher{top:.7rem;right:.7rem;padding:.3rem}
-  .pal-btn{padding:.35rem .55rem;font-size:.65rem}
+@media (max-width:900px){
+  #stage{padding:2.5rem 1.5rem;gap:1.5rem;height:auto;min-height:100vh}
+  .stage-header{grid-template-columns:1fr;gap:1.2rem}
+  .year-display{font-size:2.6rem}
+  .narr-title{font-size:1.1rem;min-height:auto}
+  .narr-body{min-height:auto}
+  .legend{gap:.9rem 1.3rem}
 }
 </style>
 </head>
@@ -231,41 +186,13 @@ footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
 
 <div class="scroll-progress" id="progress"></div>
 
-<!-- Palette switcher -->
-<div class="palette-switcher" id="pal-switch">
-  <button class="pal-btn active" data-pal="cool">
-    <span class="pal-swatches">
-      <span class="pal-sw" style="background:#38bdf8"></span>
-      <span class="pal-sw" style="background:#ec4899"></span>
-      <span class="pal-sw" style="background:#fb923c"></span>
-    </span>
-    Cool
-  </button>
-  <button class="pal-btn" data-pal="warm">
-    <span class="pal-swatches">
-      <span class="pal-sw" style="background:#f0e6d2"></span>
-      <span class="pal-sw" style="background:#b91c1c"></span>
-      <span class="pal-sw" style="background:#d97706"></span>
-    </span>
-    Warm
-  </button>
-  <button class="pal-btn" data-pal="mono">
-    <span class="pal-swatches">
-      <span class="pal-sw" style="background:#cbd5e1"></span>
-      <span class="pal-sw" style="background:#f59e0b"></span>
-      <span class="pal-sw" style="background:#52525b"></span>
-    </span>
-    Mono
-  </button>
-</div>
-
 <!-- HERO -->
 <section id="hero">
-  <div class="eyebrow">100 Trials · 1995 → 2024</div>
-  <h1 class="hero-title">If 100 trials happened today,<br>only <em>20</em> would be American.</h1>
-  <p class="hero-sub">Each block is one percent of the world's clinical trials. Watch them change hands as you scroll.</p>
+  <div class="byline">A Data Story · 1995 — 2024</div>
+  <h1 class="hero-title">If 500 trials happened today,<br>only <em>100</em> would be American.</h1>
+  <p class="hero-sub">Each square is one of the world's clinical trial sites. Scroll to watch three decades of migration — from American dominance to a Pacific-led industry.</p>
   <div class="scroll-cue">
-    <span>Scroll</span>
+    <span>Scroll to begin</span>
     <div class="scroll-line"></div>
   </div>
 </section>
@@ -273,14 +200,22 @@ footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
 <!-- STICKY SCROLL STAGE — 700vh of scroll drives 7 year stops -->
 <div id="stage-wrap" style="height:700vh">
   <div id="stage">
-    <div class="narration">
-      <div class="year-display" id="year-display">1995</div>
-      <div class="year-sub" id="year-sub">Peak American Era</div>
-      <h2 class="narr-title" id="narr-title">America runs <em>four in five</em> trials worldwide.</h2>
-      <p class="narr-body" id="narr-body">In the mid-90s the US was the unrivalled center of clinical research. 80 of every 100 trial sites were American — Europe held most of the rest. China and India were rounding errors.</p>
+    <div class="stage-header">
+      <div class="year-block">
+        <div class="year-display" id="year-display">1995</div>
+        <div class="year-sub" id="year-sub">Peak American Era</div>
+      </div>
+      <div class="narration">
+        <div class="narr-tag">The Story</div>
+        <h2 class="narr-title" id="narr-title">America runs <em>four in five</em> trials worldwide.</h2>
+        <p class="narr-body" id="narr-body">In the mid-90s the US was the unrivalled center of clinical research. 400 of every 500 trial sites were American — Europe held most of the rest. China and India were rounding errors.</p>
+      </div>
     </div>
-    <div class="right-col">
-      <div class="grid-label">100 trials = <strong>1% each</strong></div>
+    <div class="ribbon-wrap">
+      <div class="grid-label">
+        <span>500 trial sites worldwide · <strong>each square = one site</strong></span>
+        <span style="opacity:.7">10 rows × 50 columns</span>
+      </div>
       <div id="block-grid"></div>
       <div class="legend" id="legend"></div>
     </div>
@@ -290,10 +225,10 @@ footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
 <!-- OUTRO -->
 <section id="outro">
   <div class="cl-inner">
-    <p class="eyebrow" style="color:var(--china)">The Migration, In One Image</p>
-    <h2 class="cl-title">60 American blocks <em>changed hands</em><br>in three decades.</h2>
+    <p class="eyebrow">The Migration, In One Image</p>
+    <h2 class="cl-title">300 American sites <em>changed hands</em><br>in three decades.</h2>
     <p class="cl-body">No single year decided it. Each year shaved a few points off the US share — to China, then India, then everywhere with patients and lower costs. The cumulative effect: a reshaped industry.</p>
-    <a href="index.html" class="back-link">← Back to full story</a>
+    <a href="index.html" class="back-link">Back to full story</a>
   </div>
 </section>
 
@@ -302,49 +237,52 @@ footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
 </footer>
 
 <script>
-/* ============ DATA: distribution of 100 blocks per year ============ */
+/* ============ DATA: distribution of 500 blocks per year ============ */
+const TOTAL = 500;
+const ROWS = 10;
+const COLS = 50;
 const YEARS = [
   {
     year:1995, sub:'Peak American Era',
     title:'America runs <em>four in five</em> trials worldwide.',
-    body:'In the mid-90s the US was the unrivalled center of clinical research. 80 of every 100 trial sites were American — Europe held most of the rest. China and India were rounding errors.',
-    dist:{us:80, eu:12, ee:2, latam:2, china:1, india:0, kr:1, other:2}
+    body:'In the mid-90s the US was the unrivalled center of clinical research. 400 of every 500 trial sites were American — Europe held most of the rest. China and India were rounding errors.',
+    dist:{us:400, eu:60, ee:10, latam:10, china:5, india:0, kr:5, other:10}
   },
   {
     year:2000, sub:'The First Cracks',
     title:'Eastern Europe and Latin America <em>open up</em>.',
-    body:'Post-Soviet reforms opened Poland, Hungary, and the Czech Republic. Brazil and Argentina joined too. The US share starts slipping for the first time — from 80 to 70 in five years.',
-    dist:{us:70, eu:14, ee:5, latam:4, china:2, india:1, kr:1, other:3}
+    body:'Post-Soviet reforms opened Poland, Hungary, and the Czech Republic. Brazil and Argentina joined the trial map too. The US share slipped for the first time — from 80% to 70% in five years.',
+    dist:{us:350, eu:70, ee:25, latam:20, china:10, india:5, kr:5, other:15}
   },
   {
     year:2005, sub:'Asia Wakes Up',
     title:'China and India <em>arrive</em> on the map.',
-    body:'China&apos;s SFDA reforms and India&apos;s 2005 patent law open Asia to global pharma. The first wave of large multinational trials begin enrolling outside Western markets.',
-    dist:{us:55, eu:18, ee:7, latam:6, china:6, india:4, kr:2, other:2}
+    body:'China&apos;s SFDA reforms and India&apos;s 2005 patent law opened Asia to global pharma. The first wave of large multinational trials began enrolling outside Western markets.',
+    dist:{us:275, eu:90, ee:35, latam:30, china:30, india:20, kr:10, other:10}
   },
   {
     year:2010, sub:'Parity Approaches',
     title:'For the first time, more trial sites are <em class="red">non-US</em> than US.',
-    body:'2010 marks the crossover. Phase 3 trials need thousands of patients — and they\'re cheaper to find abroad. India hits a peak before regulatory tightening; China keeps growing fast.',
-    dist:{us:42, eu:18, ee:8, latam:6, china:12, india:8, kr:3, other:3}
+    body:'2010 marks the crossover. Phase 3 trials need thousands of patients — and they were cheaper to find abroad. India hit a peak before regulatory tightening; China kept growing fast.',
+    dist:{us:210, eu:90, ee:40, latam:30, china:60, india:40, kr:15, other:15}
   },
   {
     year:2015, sub:'China Surges',
     title:'China <em class="red">overtakes Europe</em> as the #2 trial host.',
-    body:'China\'s Hua Drug Review reforms and CDE modernization make it the fastest-growing trial venue worldwide. Local pharma starts running its own trials too. India\'s share consolidates.',
-    dist:{us:32, eu:17, ee:8, latam:6, china:20, india:10, kr:4, other:3}
+    body:'China\'s Hua drug-review reforms and CDE modernization made it the fastest-growing trial venue worldwide. Local Chinese pharma began running its own trials. India\'s share consolidated.',
+    dist:{us:160, eu:85, ee:40, latam:30, china:100, india:50, kr:20, other:15}
   },
   {
     year:2020, sub:'The New Order',
     title:'China <em class="red">passes the US</em> in active trial sites.',
-    body:'Even through COVID, China kept enrolling. By 2020, China hosts more industry-sponsored trial sites than the US for the first time in modern history — and the gap keeps widening.',
-    dist:{us:25, eu:16, ee:8, latam:5, china:28, india:12, kr:4, other:2}
+    body:'Even through COVID, China kept enrolling. By 2020, China hosted more industry-sponsored trial sites than the US for the first time in modern history — and the gap kept widening.',
+    dist:{us:125, eu:80, ee:40, latam:25, china:140, india:60, kr:20, other:10}
   },
   {
     year:2024, sub:'Where We Are',
     title:'<em class="red">One in five</em> trials happens in America.',
     body:'The US still leads in early-phase science and drug discovery. But the pivotal Phase 3 trials that decide whether a drug works — and reaches market — increasingly happen elsewhere. 73% of 2024 Phase 3 trials had no US sites at all.',
-    dist:{us:20, eu:15, ee:8, latam:5, china:32, india:14, kr:4, other:2}
+    dist:{us:100, eu:75, ee:40, latam:25, china:160, india:70, kr:20, other:10}
   }
 ];
 
@@ -355,7 +293,7 @@ const COUNTRY_VAR = {us:'--us',china:'--china',india:'--india',eu:'--eu',ee:'--e
 /* ============ BUILD GRID ============ */
 const gridEl = document.getElementById('block-grid');
 const blocks = [];
-for(let i=0;i<100;i++){
+for(let i=0;i<TOTAL;i++){
   const b = document.createElement('div');
   b.className = 'block us';
   gridEl.appendChild(b);
@@ -387,36 +325,34 @@ COUNTRY_ORDER.forEach(c=>{
    so as that country's count grows, it claims blocks in a stable pattern.
 ================================================================ */
 
-// Priority orders: index = position in 10x10 (row*10+col)
-// US fills first 80 in a "from-top-left" order; China grows from bottom-right; India from bottom-left
+// Priority orders for a ROWS x COLS grid. For the 50x10 ribbon, country
+// "homes" are spread along the horizontal axis — US anchors the left,
+// China the right, India bottom-left, EU top-right, etc. As scrolling
+// progresses years forward, China sweeps in from the right.
 function buildOrder(originRow, originCol){
   const arr = [];
-  for(let r=0;r<10;r++) for(let c=0;c<10;c++){
-    const d = Math.abs(r-originRow)+Math.abs(c-originCol);
-    arr.push({i:r*10+c, d, r, c});
+  // weight horizontal distance slightly more than vertical so spread feels
+  // ribbon-like rather than blobby.
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const d = Math.abs(c-originCol)*1.0 + Math.abs(r-originRow)*1.6;
+    arr.push({i:r*COLS+c, d});
   }
   arr.sort((a,b)=>a.d-b.d || a.i-b.i);
   return arr.map(x=>x.i);
 }
 const ORDERS = {
-  us:    buildOrder(0,0),    // top-left
-  china: buildOrder(9,9),    // bottom-right
-  india: buildOrder(9,0),    // bottom-left
-  eu:    buildOrder(0,9),    // top-right
-  ee:    buildOrder(2,5),    // top-center
-  latam: buildOrder(7,2),
-  kr:    buildOrder(5,9),
-  other: buildOrder(5,5)
+  us:    buildOrder(0,0),                // top-left
+  china: buildOrder(ROWS-1,COLS-1),      // bottom-right
+  india: buildOrder(ROWS-1,Math.floor(COLS*0.55)), // bottom mid-right
+  eu:    buildOrder(0,COLS-1),           // top-right
+  ee:    buildOrder(0,Math.floor(COLS*0.6)),       // top, just right of center
+  latam: buildOrder(ROWS-1,Math.floor(COLS*0.25)), // bottom, left-of-center
+  kr:    buildOrder(Math.floor(ROWS*0.5),COLS-1),  // middle-right
+  other: buildOrder(Math.floor(ROWS*0.5),Math.floor(COLS*0.4))
 };
 
-// Assignment for a given distribution: walk through countries in priority,
-// each claims its next-available block by its order. China/India go FIRST so
-// they get their natural "home" corners; US fills whatever remains (which
-// shrinks toward its top-left origin as years progress).
 function assign(dist){
-  const taken = new Array(100).fill(null);
-  // claim order: countries that are "growing" claim first so they get
-  // their preferred origin tiles. US claims last using remaining space.
+  const taken = new Array(TOTAL).fill(null);
   const claimOrder = ['china','india','eu','ee','latam','kr','other','us'];
   for(const c of claimOrder){
     let need = dist[c] || 0;
@@ -426,8 +362,7 @@ function assign(dist){
       if(taken[idx]===null){ taken[idx]=c; need--; }
     }
   }
-  // any leftover (rounding) → other
-  for(let i=0;i<100;i++) if(taken[i]===null) taken[i]='other';
+  for(let i=0;i<TOTAL;i++) if(taken[i]===null) taken[i]='other';
   return taken;
 }
 
@@ -437,20 +372,18 @@ function lerpDist(a,b,t){
   for(const k of COUNTRY_ORDER){
     out[k] = Math.round((a[k]||0)*(1-t) + (b[k]||0)*t);
   }
-  // normalize to 100
   let sum = COUNTRY_ORDER.reduce((s,k)=>s+out[k],0);
-  let diff = 100-sum;
-  // adjust biggest bucket
+  let diff = TOTAL-sum;
   const big = COUNTRY_ORDER.reduce((m,k)=>out[k]>out[m]?k:m,'us');
   out[big]+=diff;
   return out;
 }
 
 /* ============ RENDER ============ */
-let lastAssignment = new Array(100).fill('us');
+let lastAssignment = new Array(TOTAL).fill('us');
 function render(dist, narrative){
   const assignment = assign(dist);
-  for(let i=0;i<100;i++){
+  for(let i=0;i<TOTAL;i++){
     if(assignment[i]!==lastAssignment[i]){
       blocks[i].className = 'block '+assignment[i];
     }
@@ -519,20 +452,6 @@ currentNarrativeIdx = 0;
 window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {passive:true});
 window.addEventListener('resize', onScroll);
 onScroll();
-
-/* ============ PALETTE SWITCHER ============ */
-const palBtns = document.querySelectorAll('.pal-btn');
-const savedPal = localStorage.getItem('blocksPalette') || 'cool';
-function applyPalette(p){
-  document.body.classList.remove('palette-cool','palette-warm','palette-mono');
-  if(p!=='cool') document.body.classList.add('palette-'+p);
-  palBtns.forEach(b=>b.classList.toggle('active', b.dataset.pal===p));
-  localStorage.setItem('blocksPalette', p);
-}
-palBtns.forEach(b=>{
-  b.addEventListener('click', ()=>applyPalette(b.dataset.pal));
-});
-applyPalette(savedPal);
 </script>
 </body>
 </html>
