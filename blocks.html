@@ -286,7 +286,10 @@ const YEARS = [
   }
 ];
 
-const COUNTRY_ORDER = ['us','china','india','eu','ee','latam','kr','other'];
+// Order is also the LEFT→RIGHT order in the ribbon. The Atlantic West sits
+// on the left, emerging Asia on the right — so US shrinks leftward and China
+// grows rightward as years advance.
+const COUNTRY_ORDER = ['us','eu','ee','latam','other','kr','india','china'];
 const COUNTRY_NAMES = {us:'United States',china:'China',india:'India',eu:'EU & UK',ee:'Eastern Europe',latam:'Latin America',kr:'South Korea',other:'Rest of World'};
 const COUNTRY_VAR = {us:'--us',china:'--china',india:'--india',eu:'--eu',ee:'--ee',latam:'--latam',kr:'--kr',other:'--other'};
 
@@ -325,44 +328,25 @@ COUNTRY_ORDER.forEach(c=>{
    so as that country's count grows, it claims blocks in a stable pattern.
 ================================================================ */
 
-// Priority orders for a ROWS x COLS grid. For the 50x10 ribbon, country
-// "homes" are spread along the horizontal axis — US anchors the left,
-// China the right, India bottom-left, EU top-right, etc. As scrolling
-// progresses years forward, China sweeps in from the right.
-function buildOrder(originRow, originCol){
-  const arr = [];
-  // weight horizontal distance slightly more than vertical so spread feels
-  // ribbon-like rather than blobby.
-  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
-    const d = Math.abs(c-originCol)*1.0 + Math.abs(r-originRow)*1.6;
-    arr.push({i:r*COLS+c, d});
-  }
-  arr.sort((a,b)=>a.d-b.d || a.i-b.i);
-  return arr.map(x=>x.i);
-}
-const ORDERS = {
-  us:    buildOrder(0,0),                // top-left
-  china: buildOrder(ROWS-1,COLS-1),      // bottom-right
-  india: buildOrder(ROWS-1,Math.floor(COLS*0.55)), // bottom mid-right
-  eu:    buildOrder(0,COLS-1),           // top-right
-  ee:    buildOrder(0,Math.floor(COLS*0.6)),       // top, just right of center
-  latam: buildOrder(ROWS-1,Math.floor(COLS*0.25)), // bottom, left-of-center
-  kr:    buildOrder(Math.floor(ROWS*0.5),COLS-1),  // middle-right
-  other: buildOrder(Math.floor(ROWS*0.5),Math.floor(COLS*0.4))
-};
+// Column-major fill: each country occupies a contiguous block of columns
+// (filling top-to-bottom within each column), in COUNTRY_ORDER left-to-right.
+// Boundaries between countries are clean vertical lines — no triangular or
+// diamond shapes. Partial columns at boundaries fill from the top.
+const SEQ = (function(){
+  const s=[];
+  for(let c=0;c<COLS;c++) for(let r=0;r<ROWS;r++) s.push(r*COLS+c);
+  return s;
+})();
 
 function assign(dist){
-  const taken = new Array(TOTAL).fill(null);
-  const claimOrder = ['china','india','eu','ee','latam','kr','other','us'];
-  for(const c of claimOrder){
-    let need = dist[c] || 0;
-    if(!need) continue;
-    for(const idx of ORDERS[c]){
-      if(need<=0) break;
-      if(taken[idx]===null){ taken[idx]=c; need--; }
+  const taken = new Array(TOTAL).fill('other');
+  let idx = 0;
+  for(const country of COUNTRY_ORDER){
+    const n = dist[country] || 0;
+    for(let i=0;i<n && idx<TOTAL;i++){
+      taken[SEQ[idx++]] = country;
     }
   }
-  for(let i=0;i<TOTAL;i++) if(taken[i]===null) taken[i]='other';
   return taken;
 }
 
