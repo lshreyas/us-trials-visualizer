@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Trials · The Migration</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060608;--bg2:#0a0c14;
+  --us:#4facfe;--china:#f56565;--india:#f6ad55;--eu:#68d391;
+  --ee:#34d399;--latam:#a78bfa;--kr:#fbbf24;--other:#4a5568;
+  --text:#f0f4f8;--muted:#718096;--border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
+
+/* HERO */
+#hero{
+  height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:2rem;position:relative;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,#0a1628 0%,#060608 100%);
+  overflow:hidden;
+}
+.eyebrow{
+  font-size:.75rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--us);margin-bottom:1.5rem;
+}
+.hero-title{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(2.6rem,7vw,5.5rem);line-height:1.05;font-weight:400;
+  margin-bottom:1.5rem;max-width:900px;
+}
+.hero-title em{font-style:italic;color:var(--us)}
+.hero-sub{
+  font-size:clamp(.95rem,1.4vw,1.15rem);color:var(--muted);max-width:580px;
+  line-height:1.8;margin-bottom:3rem;
+}
+.scroll-cue{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--muted));
+  animation:pulse 1.5s ease-in-out infinite;}
+
+/* STICKY SCROLL STAGE */
+#stage-wrap{position:relative;background:var(--bg)}
+#stage{
+  position:sticky;top:0;height:100vh;width:100%;
+  display:grid;grid-template-columns:1fr 480px;gap:2rem;
+  padding:4rem 5rem;align-items:center;
+}
+
+/* Left: narration */
+.narration{max-width:520px}
+.year-display{
+  font-family:'DM Serif Display',serif;font-size:clamp(4rem,8vw,7rem);line-height:1;
+  background:linear-gradient(135deg,var(--us),#7dd3fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.3rem;font-variant-numeric:tabular-nums;
+  transition:background .8s ease;
+}
+.year-display.shift{background:linear-gradient(135deg,var(--china),var(--india));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.year-sub{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;margin-bottom:2rem}
+.narr-title{
+  font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.25;
+  margin-bottom:1rem;min-height:5rem;
+}
+.narr-body{font-size:.95rem;color:var(--muted);line-height:1.75;min-height:7rem}
+.narr-title em{color:var(--us);font-style:italic}
+.narr-title em.red{color:var(--china)}
+
+/* Right: grid + legend */
+.right-col{display:flex;flex-direction:column;align-items:flex-start;gap:1.5rem}
+.grid-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
+.grid-label strong{color:var(--text);font-weight:600}
+#block-grid{
+  display:grid;grid-template-columns:repeat(10,1fr);gap:6px;
+  width:420px;height:420px;
+}
+.block{
+  border-radius:3px;background:var(--us);
+  transition:background .9s cubic-bezier(.4,0,.2,1),transform .9s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.block.us{background:var(--us);box-shadow:0 0 12px rgba(79,172,254,.25)}
+.block.china{background:var(--china);box-shadow:0 0 12px rgba(245,101,101,.25)}
+.block.india{background:var(--india);box-shadow:0 0 10px rgba(246,173,85,.22)}
+.block.eu{background:var(--eu)}
+.block.ee{background:var(--ee)}
+.block.latam{background:var(--latam)}
+.block.kr{background:var(--kr)}
+.block.other{background:var(--other)}
+
+/* Legend */
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;width:420px}
+.leg-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.78rem;
+}
+.leg-l{display:flex;align-items:center;gap:.55rem}
+.leg-sw{width:11px;height:11px;border-radius:2px}
+.leg-name{color:var(--text)}
+.leg-count{color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600;font-size:.85rem}
+.leg-count.up{color:var(--china)}
+.leg-count.down{color:var(--us)}
+
+/* Year ticker progress */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--us),var(--china));
+  z-index:100;width:0;transition:width .1s linear;
+}
+
+/* CLOSING */
+#outro{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:6rem 2rem;
+  background:radial-gradient(ellipse 70% 50% at 50% 60%,#0a0a20,#060608);
+}
+.cl-inner{max-width:860px}
+.cl-title{
+  font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,4rem);
+  line-height:1.2;margin-bottom:1.5rem;
+}
+.cl-title em{font-style:italic;color:var(--china)}
+.cl-body{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:560px;margin:0 auto 3rem}
+.back-link{
+  display:inline-block;color:var(--us);font-size:.85rem;text-decoration:none;
+  padding:.7rem 1.6rem;border:1px solid rgba(79,172,254,.35);border-radius:100px;
+  transition:all .2s;
+}
+.back-link:hover{background:rgba(79,172,254,.1);transform:translateY(-1px)}
+
+footer{padding:3rem 2rem;border-top:1px solid var(--border);max-width:1200px;margin:0 auto;text-align:center}
+footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
+
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+/* Responsive */
+@media (max-width:1000px){
+  #stage{grid-template-columns:1fr;padding:3rem 2rem;gap:1.5rem;height:auto;min-height:100vh}
+  #block-grid{width:min(420px,80vw);height:min(420px,80vw)}
+  .legend{width:min(420px,80vw)}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="progress"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="eyebrow">100 Trials · 1995 → 2024</div>
+  <h1 class="hero-title">If 100 trials happened today,<br>only <em>20</em> would be American.</h1>
+  <p class="hero-sub">Each block is one percent of the world's clinical trials. Watch them change hands as you scroll.</p>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STICKY SCROLL STAGE — 700vh of scroll drives 7 year stops -->
+<div id="stage-wrap" style="height:700vh">
+  <div id="stage">
+    <div class="narration">
+      <div class="year-display" id="year-display">1995</div>
+      <div class="year-sub" id="year-sub">Peak American Era</div>
+      <h2 class="narr-title" id="narr-title">America runs <em>four in five</em> trials worldwide.</h2>
+      <p class="narr-body" id="narr-body">In the mid-90s the US was the unrivalled center of clinical research. 80 of every 100 trial sites were American — Europe held most of the rest. China and India were rounding errors.</p>
+    </div>
+    <div class="right-col">
+      <div class="grid-label">100 trials = <strong>1% each</strong></div>
+      <div id="block-grid"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTRO -->
+<section id="outro">
+  <div class="cl-inner">
+    <p class="eyebrow" style="color:var(--china)">The Migration, In One Image</p>
+    <h2 class="cl-title">60 American blocks <em>changed hands</em><br>in three decades.</h2>
+    <p class="cl-body">No single year decided it. Each year shaved a few points off the US share — to China, then India, then everywhere with patients and lower costs. The cumulative effect: a reshaped industry.</p>
+    <a href="index.html" class="back-link">← Back to full story</a>
+  </div>
+</section>
+
+<footer>
+  <p>An experimental visualization · Counts approximate global share of industry-sponsored trial sites · 1995–2024</p>
+</footer>
+
+<script>
+/* ============ DATA: distribution of 100 blocks per year ============ */
+const YEARS = [
+  {
+    year:1995, sub:'Peak American Era',
+    title:'America runs <em>four in five</em> trials worldwide.',
+    body:'In the mid-90s the US was the unrivalled center of clinical research. 80 of every 100 trial sites were American — Europe held most of the rest. China and India were rounding errors.',
+    dist:{us:80, eu:12, ee:2, latam:2, china:1, india:0, kr:1, other:2}
+  },
+  {
+    year:2000, sub:'The First Cracks',
+    title:'Eastern Europe and Latin America <em>open up</em>.',
+    body:'Post-Soviet reforms opened Poland, Hungary, and the Czech Republic. Brazil and Argentina joined too. The US share starts slipping for the first time — from 80 to 70 in five years.',
+    dist:{us:70, eu:14, ee:5, latam:4, china:2, india:1, kr:1, other:3}
+  },
+  {
+    year:2005, sub:'Asia Wakes Up',
+    title:'China and India <em>arrive</em> on the map.',
+    body:'China&apos;s SFDA reforms and India&apos;s 2005 patent law open Asia to global pharma. The first wave of large multinational trials begin enrolling outside Western markets.',
+    dist:{us:55, eu:18, ee:7, latam:6, china:6, india:4, kr:2, other:2}
+  },
+  {
+    year:2010, sub:'Parity Approaches',
+    title:'For the first time, more trial sites are <em class="red">non-US</em> than US.',
+    body:'2010 marks the crossover. Phase 3 trials need thousands of patients — and they\'re cheaper to find abroad. India hits a peak before regulatory tightening; China keeps growing fast.',
+    dist:{us:42, eu:18, ee:8, latam:6, china:12, india:8, kr:3, other:3}
+  },
+  {
+    year:2015, sub:'China Surges',
+    title:'China <em class="red">overtakes Europe</em> as the #2 trial host.',
+    body:'China\'s Hua Drug Review reforms and CDE modernization make it the fastest-growing trial venue worldwide. Local pharma starts running its own trials too. India\'s share consolidates.',
+    dist:{us:32, eu:17, ee:8, latam:6, china:20, india:10, kr:4, other:3}
+  },
+  {
+    year:2020, sub:'The New Order',
+    title:'China <em class="red">passes the US</em> in active trial sites.',
+    body:'Even through COVID, China kept enrolling. By 2020, China hosts more industry-sponsored trial sites than the US for the first time in modern history — and the gap keeps widening.',
+    dist:{us:25, eu:16, ee:8, latam:5, china:28, india:12, kr:4, other:2}
+  },
+  {
+    year:2024, sub:'Where We Are',
+    title:'<em class="red">One in five</em> trials happens in America.',
+    body:'The US still leads in early-phase science and drug discovery. But the pivotal Phase 3 trials that decide whether a drug works — and reaches market — increasingly happen elsewhere. 73% of 2024 Phase 3 trials had no US sites at all.',
+    dist:{us:20, eu:15, ee:8, latam:5, china:32, india:14, kr:4, other:2}
+  }
+];
+
+const COUNTRY_ORDER = ['us','china','india','eu','ee','latam','kr','other'];
+const COUNTRY_NAMES = {us:'United States',china:'China',india:'India',eu:'EU & UK',ee:'Eastern Europe',latam:'Latin America',kr:'South Korea',other:'Rest of World'};
+const COUNTRY_VAR = {us:'--us',china:'--china',india:'--india',eu:'--eu',ee:'--ee',latam:'--latam',kr:'--kr',other:'--other'};
+
+/* ============ BUILD GRID ============ */
+const gridEl = document.getElementById('block-grid');
+const blocks = [];
+for(let i=0;i<100;i++){
+  const b = document.createElement('div');
+  b.className = 'block us';
+  gridEl.appendChild(b);
+  blocks.push(b);
+}
+
+/* ============ BUILD LEGEND ============ */
+const legendEl = document.getElementById('legend');
+const legendRows = {};
+COUNTRY_ORDER.forEach(c=>{
+  const row = document.createElement('div');
+  row.className = 'leg-row';
+  row.innerHTML = `
+    <div class="leg-l">
+      <div class="leg-sw" style="background:var(${COUNTRY_VAR[c]})"></div>
+      <span class="leg-name">${COUNTRY_NAMES[c]}</span>
+    </div>
+    <span class="leg-count" data-c="${c}">0</span>
+  `;
+  legendEl.appendChild(row);
+  legendRows[c] = row.querySelector('.leg-count');
+});
+
+/* ============ ASSIGN COUNTRY TO EACH BLOCK FOR A YEAR ============
+   Block ordering: paint in a fixed sequence so changes feel like
+   a slow tide reclaiming territory — China grows from bottom-right,
+   India from bottom-left, EU from top-right, etc. Each block has a
+   priority order for each country. We use a fixed per-country fill order
+   so as that country's count grows, it claims blocks in a stable pattern.
+================================================================ */
+
+// Priority orders: index = position in 10x10 (row*10+col)
+// US fills first 80 in a "from-top-left" order; China grows from bottom-right; India from bottom-left
+function buildOrder(originRow, originCol){
+  const arr = [];
+  for(let r=0;r<10;r++) for(let c=0;c<10;c++){
+    const d = Math.abs(r-originRow)+Math.abs(c-originCol);
+    arr.push({i:r*10+c, d, r, c});
+  }
+  arr.sort((a,b)=>a.d-b.d || a.i-b.i);
+  return arr.map(x=>x.i);
+}
+const ORDERS = {
+  us:    buildOrder(0,0),    // top-left
+  china: buildOrder(9,9),    // bottom-right
+  india: buildOrder(9,0),    // bottom-left
+  eu:    buildOrder(0,9),    // top-right
+  ee:    buildOrder(2,5),    // top-center
+  latam: buildOrder(7,2),
+  kr:    buildOrder(5,9),
+  other: buildOrder(5,5)
+};
+
+// Assignment for a given distribution: walk through countries in priority,
+// each claims its next-available block by its order. China/India go FIRST so
+// they get their natural "home" corners; US fills whatever remains (which
+// shrinks toward its top-left origin as years progress).
+function assign(dist){
+  const taken = new Array(100).fill(null);
+  // claim order: countries that are "growing" claim first so they get
+  // their preferred origin tiles. US claims last using remaining space.
+  const claimOrder = ['china','india','eu','ee','latam','kr','other','us'];
+  for(const c of claimOrder){
+    let need = dist[c] || 0;
+    if(!need) continue;
+    for(const idx of ORDERS[c]){
+      if(need<=0) break;
+      if(taken[idx]===null){ taken[idx]=c; need--; }
+    }
+  }
+  // any leftover (rounding) → other
+  for(let i=0;i<100;i++) if(taken[i]===null) taken[i]='other';
+  return taken;
+}
+
+/* ============ INTERPOLATE TWO DISTRIBUTIONS ============ */
+function lerpDist(a,b,t){
+  const out={};
+  for(const k of COUNTRY_ORDER){
+    out[k] = Math.round((a[k]||0)*(1-t) + (b[k]||0)*t);
+  }
+  // normalize to 100
+  let sum = COUNTRY_ORDER.reduce((s,k)=>s+out[k],0);
+  let diff = 100-sum;
+  // adjust biggest bucket
+  const big = COUNTRY_ORDER.reduce((m,k)=>out[k]>out[m]?k:m,'us');
+  out[big]+=diff;
+  return out;
+}
+
+/* ============ RENDER ============ */
+let lastAssignment = new Array(100).fill('us');
+function render(dist, narrative){
+  const assignment = assign(dist);
+  for(let i=0;i<100;i++){
+    if(assignment[i]!==lastAssignment[i]){
+      blocks[i].className = 'block '+assignment[i];
+    }
+  }
+  lastAssignment = assignment;
+  // update counts
+  COUNTRY_ORDER.forEach(c=>{
+    legendRows[c].textContent = dist[c]||0;
+    legendRows[c].classList.remove('up','down');
+    if((dist[c]||0) > (YEARS[0].dist[c]||0)) legendRows[c].classList.add('up');
+    if((dist[c]||0) < (YEARS[0].dist[c]||0) && c==='us') legendRows[c].classList.add('down');
+  });
+  if(narrative){
+    document.getElementById('year-display').textContent = narrative.year;
+    document.getElementById('year-display').classList.toggle('shift', narrative.year>=2010);
+    document.getElementById('year-sub').textContent = narrative.sub;
+    document.getElementById('narr-title').innerHTML = narrative.title;
+    document.getElementById('narr-body').innerHTML = narrative.body;
+  }
+}
+
+/* ============ SCROLL DRIVER ============ */
+const stageWrap = document.getElementById('stage-wrap');
+const progressBar = document.getElementById('progress');
+let currentNarrativeIdx = -1;
+
+function onScroll(){
+  const rect = stageWrap.getBoundingClientRect();
+  const stageHeight = stageWrap.offsetHeight;
+  const winH = window.innerHeight;
+  // progress: 0 when top hits top of viewport; 1 when bottom hits bottom
+  const scrolled = -rect.top;
+  const total = stageHeight - winH;
+  const p = Math.max(0, Math.min(1, scrolled/total));
+
+  // overall page progress bar
+  const docH = document.documentElement.scrollHeight - winH;
+  const globalP = Math.max(0,Math.min(1, window.scrollY/docH));
+  progressBar.style.width = (globalP*100)+'%';
+
+  // map p (0-1) onto YEARS array
+  const n = YEARS.length;
+  const seg = p*(n-1);
+  const i = Math.min(n-2, Math.floor(seg));
+  const t = seg - i;
+  const a = YEARS[i], b = YEARS[i+1];
+  const dist = lerpDist(a.dist, b.dist, t);
+
+  // narrative snaps to whichever stop we're closer to
+  const narrIdx = t<0.5 ? i : i+1;
+  const narrative = (narrIdx !== currentNarrativeIdx) ? YEARS[narrIdx] : null;
+  if(narrative) currentNarrativeIdx = narrIdx;
+
+  // year label can show interpolated year for continuous feel
+  const interpYear = Math.round(a.year*(1-t) + b.year*t);
+  render(dist, narrative);
+  // override the year display with interpolated value
+  document.getElementById('year-display').textContent = interpYear;
+  document.getElementById('year-display').classList.toggle('shift', interpYear>=2010);
+}
+
+// initial render
+render(YEARS[0].dist, YEARS[0]);
+currentNarrativeIdx = 0;
+
+window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {passive:true});
+window.addEventListener('resize', onScroll);
+onScroll();
+</script>
+</body>
+</html>
