@@ -4,29 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>100 Trials · The Migration</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  /* NYT/Upshot-inspired editorial palette on warm paper */
-  --bg:#ece4d2;        /* paper cream */
-  --bg2:#e3dac4;       /* slightly deeper cream */
-  --text:#1f1b16;      /* warm ink */
-  --muted:#7a7060;     /* warm gray */
-  --border:rgba(31,27,22,.14);
-  --rule:rgba(31,27,22,.22);
 
-  --us:#2c4055;        /* deep slate */
-  --china:#b04a3a;     /* terracotta */
-  --india:#c89248;     /* ochre */
-  --eu:#6e8049;        /* olive sage */
-  --ee:#4e7a7e;        /* dusty teal */
-  --latam:#7a4c5e;     /* dusty plum */
-  --kr:#8a7240;        /* mustard */
-  --other:#a39884;     /* warm gray */
+/* ============ DEFAULT THEME = RISO (2-ink + paper) ============ */
+:root{
+  --bg:#f5efe1;            /* bone paper */
+  --bg2:#ebe3d0;
+  --text:#15130d;          /* warm ink */
+  --muted:#857c69;
+  --border:rgba(21,19,13,.14);
+  --rule:rgba(21,19,13,.28);
+  --dim:#e3dcc8;           /* dimmed block color */
+
+  --us:#2438c4;            /* ultramarine */
+  --china:#ff5a4d;         /* coral */
+  --india:#d4a64a;         /* mustard ink */
+  --eu:#5d6849;            /* olive ink */
+  --ee:#7d8b6d;
+  --latam:#8a4a5c;         /* dusty plum */
+  --kr:#c4933a;
+  --other:#9a9182;
+
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
+  --hero-grad:radial-gradient(ellipse 80% 60% at 50% 40%,#f8f2e4 0%,#f5efe1 100%);
+  --outro-grad:radial-gradient(ellipse 70% 50% at 50% 60%,#efe7d4,#f5efe1);
 }
+
+/* ============ BRUTAL — ink black + acid yellow on manila ============ */
+body.theme-brutal{
+  --bg:#f0ece4;
+  --bg2:#e8e3d6;
+  --text:#0a0a0a;
+  --muted:#6b6b6b;
+  --border:rgba(0,0,0,.14);
+  --rule:rgba(0,0,0,.35);
+  --dim:#dcd5c5;
+
+  --us:#0a0a0a;            /* ink black — primary subject */
+  --china:#e6ff00;         /* acid yellow */
+  --india:#4a4a4a;
+  --eu:#888888;
+  --ee:#707070;
+  --latam:#555555;
+  --kr:#999999;
+  --other:#bbbbbb;
+
+  --font-display:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
+  --font-body:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
+  --hero-grad:radial-gradient(ellipse 80% 60% at 50% 40%,#f5f1e9 0%,#f0ece4 100%);
+  --outro-grad:radial-gradient(ellipse 70% 50% at 50% 60%,#ebe6d8,#f0ece4);
+}
+
+/* ============ JEWEL — saturated deeps on warm taupe ============ */
+body.theme-jewel{
+  --bg:#e8e1cf;
+  --bg2:#ddd5c0;
+  --text:#2a1f1a;
+  --muted:#847565;
+  --border:rgba(42,31,26,.14);
+  --rule:rgba(42,31,26,.28);
+  --dim:#d4ccb6;
+
+  --us:#1c4b3a;            /* forest green */
+  --china:#8b1e2e;         /* oxblood */
+  --india:#b8842c;         /* mustard */
+  --eu:#4a5a6e;            /* slate blue */
+  --ee:#5a4f6e;            /* aubergine */
+  --latam:#934e3e;         /* sienna */
+  --kr:#8a7440;            /* golden brown */
+  --other:#7d6e5d;
+
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-body:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;
+  --hero-grad:radial-gradient(ellipse 80% 60% at 50% 40%,#ede6d4 0%,#e8e1cf 100%);
+  --outro-grad:radial-gradient(ellipse 70% 50% at 50% 60%,#e0d8c2,#e8e1cf);
+}
+
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;transition:background .35s ease,color .35s ease}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:rgba(31,27,22,.18);border-radius:4px}
 
@@ -34,26 +92,29 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #hero{
   height:100vh;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;padding:2rem;position:relative;
-  background:radial-gradient(ellipse 80% 60% at 50% 40%,#f1eadc 0%,#ece4d2 100%);
+  background:var(--hero-grad);transition:background .35s ease;
   overflow:hidden;
 }
 .eyebrow{
+  font-family:var(--font-body);
   font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
   color:var(--china);margin-bottom:1.8rem;
 }
 .hero-title{
-  font-family:'DM Serif Display',Georgia,serif;
+  font-family:var(--font-display);
   font-size:clamp(2.6rem,6.5vw,5rem);line-height:1.08;font-weight:400;
-  margin-bottom:1.5rem;max-width:920px;color:var(--text);
+  margin-bottom:1.5rem;max-width:920px;color:var(--text);letter-spacing:-.01em;
 }
 .hero-title em{font-style:italic;color:var(--china)}
 .hero-sub{
-  font-size:clamp(.95rem,1.3vw,1.1rem);color:var(--muted);max-width:580px;
-  line-height:1.8;margin-bottom:3rem;
+  font-family:var(--font-body);
+  font-size:clamp(.9rem,1.2vw,1.02rem);color:var(--muted);max-width:580px;
+  line-height:1.75;margin-bottom:3rem;font-weight:400;
 }
 .byline{
+  font-family:var(--font-body);
   font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;
-  margin-bottom:1.2rem;
+  margin-bottom:1.2rem;font-weight:500;
 }
 .byline::before,.byline::after{content:'';display:inline-block;width:24px;height:1px;background:var(--rule);margin:0 .8rem;vertical-align:middle}
 .scroll-cue{
@@ -79,27 +140,28 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 }
 .year-block{border-top:2px solid var(--rule);padding-top:.7rem}
 .year-display{
-  font-family:'DM Serif Display',serif;font-size:clamp(3.2rem,5.5vw,4.6rem);line-height:1;
+  font-family:var(--font-display);font-size:clamp(3.2rem,5.5vw,4.6rem);line-height:1;
   color:var(--text);margin-bottom:.4rem;font-variant-numeric:tabular-nums;font-weight:400;
+  letter-spacing:-.02em;
 }
 .year-display.shift{color:var(--china)}
-.year-sub{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em}
+.year-sub{font-family:var(--font-body);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-weight:500}
 
 .narration{max-width:680px;border-top:2px solid var(--rule);padding-top:.7rem}
-.narr-tag{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;margin-bottom:.7rem}
+.narr-tag{font-family:var(--font-body);font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;margin-bottom:.7rem;font-weight:500}
 .narr-title{
-  font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,2vw,1.7rem);line-height:1.3;
-  margin-bottom:.8rem;min-height:4rem;color:var(--text);font-weight:400;
+  font-family:var(--font-display);font-size:clamp(1.3rem,2vw,1.7rem);line-height:1.3;
+  margin-bottom:.8rem;min-height:4rem;color:var(--text);font-weight:400;letter-spacing:-.005em;
 }
-.narr-body{font-size:.92rem;color:var(--text);opacity:.78;line-height:1.7;min-height:5rem;max-width:580px}
+.narr-body{font-family:var(--font-body);font-size:.88rem;color:var(--text);opacity:.78;line-height:1.7;min-height:5rem;max-width:580px;font-weight:400}
 .narr-title em{color:var(--us);font-style:italic;font-weight:400}
 .narr-title em.red{color:var(--china)}
 
 /* Ribbon grid + legend */
 .ribbon-wrap{max-width:1200px;width:100%}
 .grid-label{
-  font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;
-  margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-body);font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.22em;
+  margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;font-weight:500;
 }
 .grid-label strong{color:var(--text);font-weight:600}
 #block-grid{
@@ -119,7 +181,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .block.latam{background-color:var(--latam)}
 .block.kr{background-color:var(--kr)}
 .block.other{background-color:var(--other)}
-.block.dim{background-color:#d6cfbb;box-shadow:0 1px 1px rgba(31,27,22,.04), inset 0 0 0 0.5px rgba(0,0,0,.04)}
+.block.dim{background-color:var(--dim);box-shadow:0 1px 1px rgba(0,0,0,.04), inset 0 0 0 0.5px rgba(0,0,0,.04)}
 
 /* Legend — horizontal row beneath ribbon */
 .legend{
@@ -146,10 +208,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 }
 .leg-row.inactive .leg-name,
 .leg-row.inactive .leg-count{opacity:.4}
-.leg-name{color:var(--text);font-weight:500}
+.leg-name{font-family:var(--font-body);color:var(--text);font-weight:500;font-size:.78rem}
 .leg-count{
-  color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600;font-size:.82rem;
-  margin-left:.2rem;
+  font-family:var(--font-body);color:var(--muted);font-variant-numeric:tabular-nums;
+  font-weight:600;font-size:.8rem;margin-left:.2rem;
 }
 .leg-count.up{color:var(--china)}
 .leg-count.down{color:var(--us)}
@@ -164,26 +226,91 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #outro{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:6rem 2rem;
-  background:radial-gradient(ellipse 70% 50% at 50% 60%,#e8dfc8,#ece4d2);
+  background:var(--outro-grad);transition:background .35s ease;
 }
 .cl-inner{max-width:860px}
 .cl-title{
-  font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,4.5vw,3.6rem);
-  line-height:1.25;margin-bottom:1.5rem;color:var(--text);font-weight:400;
+  font-family:var(--font-display);font-size:clamp(2.2rem,4.5vw,3.6rem);
+  line-height:1.25;margin-bottom:1.5rem;color:var(--text);font-weight:400;letter-spacing:-.01em;
 }
 .cl-title em{font-style:italic;color:var(--china)}
-.cl-body{font-size:1rem;color:var(--text);opacity:.78;line-height:1.8;max-width:580px;margin:0 auto 3rem}
+.cl-body{font-family:var(--font-body);font-size:.95rem;color:var(--text);opacity:.78;line-height:1.75;max-width:580px;margin:0 auto 3rem;font-weight:400}
 .back-link{
-  display:inline-block;color:var(--text);font-size:.78rem;text-decoration:none;
+  display:inline-block;font-family:var(--font-body);color:var(--text);font-size:.72rem;text-decoration:none;
   padding:.75rem 1.7rem;border:1px solid var(--rule);border-radius:100px;
   transition:all .2s;text-transform:uppercase;letter-spacing:.16em;font-weight:500;
 }
-.back-link:hover{background:rgba(31,27,22,.06);border-color:var(--text)}
+.back-link:hover{background:rgba(0,0,0,.06);border-color:var(--text)}
 
 footer{padding:3rem 2rem;border-top:1px solid var(--border);max-width:1200px;margin:0 auto;text-align:center}
-footer p{font-size:.7rem;color:var(--muted);line-height:1.8}
+footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-height:1.8}
 
 @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ============ BRUTAL THEME — monospace everywhere needs tighter sizes ============ */
+body.theme-brutal .hero-title{
+  font-size:clamp(1.9rem,4.6vw,3.4rem);text-transform:uppercase;letter-spacing:-.02em;
+  line-height:1.05;font-weight:700;
+}
+body.theme-brutal .hero-title em{
+  font-style:normal;color:var(--text);background:var(--china);padding:0 .12em;
+}
+body.theme-brutal .narr-title{
+  font-size:clamp(1rem,1.5vw,1.25rem);text-transform:uppercase;letter-spacing:0;
+  line-height:1.4;font-weight:600;
+}
+body.theme-brutal .narr-title em{
+  font-style:normal;color:var(--text);background:var(--china);padding:0 .15em;
+  text-decoration:none;
+}
+body.theme-brutal .narr-title em.red{background:var(--china);color:var(--text)}
+body.theme-brutal .year-display{
+  font-size:clamp(2.6rem,5vw,3.8rem);letter-spacing:-.05em;font-weight:700;
+}
+body.theme-brutal .cl-title{
+  font-size:clamp(1.7rem,3.6vw,2.6rem);text-transform:uppercase;letter-spacing:-.02em;
+  line-height:1.15;font-weight:700;
+}
+body.theme-brutal .cl-title em{
+  font-style:normal;background:var(--china);color:var(--text);padding:0 .12em;
+}
+body.theme-brutal .block{border-radius:0}
+body.theme-brutal .block.dim{box-shadow:inset 0 0 0 0.5px rgba(0,0,0,.08)}
+body.theme-brutal .eyebrow{color:var(--text);background:var(--china);padding:.25em .5em;display:inline-block}
+body.theme-brutal .byline{color:var(--text)}
+body.theme-brutal .byline::before,
+body.theme-brutal .byline::after{background:var(--text);height:2px}
+body.theme-brutal .block{box-shadow:none}
+
+/* ============ JEWEL THEME — Instrument Serif sings in italic ============ */
+body.theme-jewel .hero-title em{font-style:italic;font-weight:400}
+body.theme-jewel .narr-title em{font-style:italic}
+body.theme-jewel .cl-title em{font-style:italic}
+body.theme-jewel .hero-title{letter-spacing:-.02em}
+
+/* ============ RISO THEME — Fraunces refinement ============ */
+body .hero-title{font-feature-settings:"ss01"}
+body .narr-title{font-feature-settings:"ss01"}
+
+/* Theme switcher */
+.theme-switcher{
+  position:fixed;top:1.1rem;right:1.1rem;z-index:200;
+  display:flex;gap:.3rem;padding:.35rem;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:100px;
+}
+.th-btn{
+  font-family:var(--font-body);
+  display:flex;align-items:center;gap:.45rem;
+  padding:.4rem .85rem;border:none;background:transparent;cursor:pointer;
+  border-radius:100px;color:var(--muted);font-size:.66rem;
+  text-transform:uppercase;letter-spacing:.1em;font-weight:600;
+  transition:all .25s ease;
+}
+.th-btn:hover{color:var(--text)}
+.th-btn.active{background:var(--text);color:var(--bg)}
+.th-dots{display:inline-flex;gap:2px}
+.th-dots span{width:7px;height:7px;border-radius:50%;display:inline-block}
 
 /* Responsive */
 @media (max-width:900px){
@@ -193,12 +320,42 @@ footer p{font-size:.7rem;color:var(--muted);line-height:1.8}
   .narr-title{font-size:1.1rem;min-height:auto}
   .narr-body{min-height:auto}
   .legend{gap:.9rem 1.3rem}
+  .theme-switcher{top:.6rem;right:.6rem;padding:.25rem}
+  .th-btn{padding:.32rem .55rem;font-size:.6rem;gap:.3rem}
 }
 </style>
 </head>
 <body>
 
 <div class="scroll-progress" id="progress"></div>
+
+<!-- Theme switcher -->
+<div class="theme-switcher" id="theme-switcher">
+  <button class="th-btn active" data-th="riso">
+    <span class="th-dots">
+      <span style="background:#2438c4"></span>
+      <span style="background:#ff5a4d"></span>
+      <span style="background:#f5efe1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
+    </span>
+    Riso
+  </button>
+  <button class="th-btn" data-th="brutal">
+    <span class="th-dots">
+      <span style="background:#0a0a0a"></span>
+      <span style="background:#e6ff00"></span>
+      <span style="background:#f0ece4;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
+    </span>
+    Brutal
+  </button>
+  <button class="th-btn" data-th="jewel">
+    <span class="th-dots">
+      <span style="background:#1c4b3a"></span>
+      <span style="background:#8b1e2e"></span>
+      <span style="background:#e8e1cf;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
+    </span>
+    Jewel
+  </button>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -479,6 +636,20 @@ currentNarrativeIdx = 0;
 window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {passive:true});
 window.addEventListener('resize', onScroll);
 onScroll();
+
+/* ============ THEME SWITCHER ============ */
+const themeBtns = document.querySelectorAll('.th-btn');
+const savedTheme = localStorage.getItem('blocksTheme') || 'riso';
+function applyTheme(t){
+  document.body.classList.remove('theme-riso','theme-brutal','theme-jewel');
+  if(t!=='riso') document.body.classList.add('theme-'+t);
+  themeBtns.forEach(b=>b.classList.toggle('active', b.dataset.th===t));
+  localStorage.setItem('blocksTheme', t);
+}
+themeBtns.forEach(b=>{
+  b.addEventListener('click', ()=>applyTheme(b.dataset.th));
+});
+applyTheme(savedTheme);
 </script>
 </body>
 </html>
