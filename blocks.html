@@ -4,78 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>100 Trials · The Migration</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
-/* ============ DEFAULT THEME = RISO (2-ink + paper) ============ */
+/* ============ EDITORIAL JEWEL on warm taupe ============
+   Country colors derived from national flags where applicable;
+   regional groupings use distinguishable jewel-tones. */
 :root{
-  --bg:#f5efe1;            /* bone paper */
-  --bg2:#ebe3d0;
-  --text:#15130d;          /* warm ink */
-  --muted:#857c69;
-  --border:rgba(21,19,13,.14);
-  --rule:rgba(21,19,13,.28);
-  --dim:#e3dcc8;           /* dimmed block color */
-
-  --us:#2438c4;            /* ultramarine */
-  --china:#ff5a4d;         /* coral */
-  --india:#d4a64a;         /* mustard ink */
-  --eu:#5d6849;            /* olive ink */
-  --ee:#7d8b6d;
-  --latam:#8a4a5c;         /* dusty plum */
-  --kr:#c4933a;
-  --other:#9a9182;
-
-  --font-display:'Fraunces',Georgia,serif;
-  --font-body:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
-  --hero-grad:radial-gradient(ellipse 80% 60% at 50% 40%,#f8f2e4 0%,#f5efe1 100%);
-  --outro-grad:radial-gradient(ellipse 70% 50% at 50% 60%,#efe7d4,#f5efe1);
-}
-
-/* ============ BRUTAL — ink black + acid yellow on manila ============ */
-body.theme-brutal{
-  --bg:#f0ece4;
-  --bg2:#e8e3d6;
-  --text:#0a0a0a;
-  --muted:#6b6b6b;
-  --border:rgba(0,0,0,.14);
-  --rule:rgba(0,0,0,.35);
-  --dim:#dcd5c5;
-
-  --us:#0a0a0a;            /* ink black — primary subject */
-  --china:#e6ff00;         /* acid yellow */
-  --india:#4a4a4a;
-  --eu:#888888;
-  --ee:#707070;
-  --latam:#555555;
-  --kr:#999999;
-  --other:#bbbbbb;
-
-  --font-display:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
-  --font-body:'JetBrains Mono','SFMono-Regular',Menlo,monospace;
-  --hero-grad:radial-gradient(ellipse 80% 60% at 50% 40%,#f5f1e9 0%,#f0ece4 100%);
-  --outro-grad:radial-gradient(ellipse 70% 50% at 50% 60%,#ebe6d8,#f0ece4);
-}
-
-/* ============ JEWEL — saturated deeps on warm taupe ============ */
-body.theme-jewel{
-  --bg:#e8e1cf;
+  --bg:#e8e1cf;            /* warm taupe paper */
   --bg2:#ddd5c0;
-  --text:#2a1f1a;
+  --text:#2a1f1a;          /* dark cocoa ink */
   --muted:#847565;
   --border:rgba(42,31,26,.14);
   --rule:rgba(42,31,26,.28);
-  --dim:#d4ccb6;
+  --dim:#d4ccb6;           /* dimmed block color */
 
-  --us:#1c4b3a;            /* forest green */
-  --china:#8b1e2e;         /* oxblood */
-  --india:#b8842c;         /* mustard */
-  --eu:#4a5a6e;            /* slate blue */
-  --ee:#5a4f6e;            /* aubergine */
-  --latam:#934e3e;         /* sienna */
-  --kr:#8a7440;            /* golden brown */
-  --other:#7d6e5d;
+  --us:#1d3557;            /* navy — US flag blue, muted */
+  --china:#a8201e;         /* deep red — PRC flag */
+  --india:#cc7722;         /* deep saffron — India flag */
+  --eu:#003399;            /* royal blue — EU flag */
+  --ee:#87583b;            /* burgundy bronze — regional */
+  --latam:#2d5a3d;         /* deep green — Brazil flag */
+  --kr:#4a3d6e;            /* deep indigo — distinct from US/EU */
+  --other:#7d6e5d;         /* warm earth */
 
   --font-display:'Instrument Serif',Georgia,serif;
   --font-body:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;
@@ -105,7 +57,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflo
   font-size:clamp(2.6rem,6.5vw,5rem);line-height:1.08;font-weight:400;
   margin-bottom:1.5rem;max-width:920px;color:var(--text);letter-spacing:-.01em;
 }
-.hero-title em{font-style:italic;color:var(--china)}
+.hero-title em{font-style:italic;color:var(--us)}
 .hero-sub{
   font-family:var(--font-body);
   font-size:clamp(.9rem,1.2vw,1.02rem);color:var(--muted);max-width:580px;
@@ -247,70 +199,10 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 
 @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
 
-/* ============ BRUTAL THEME — monospace everywhere needs tighter sizes ============ */
-body.theme-brutal .hero-title{
-  font-size:clamp(1.9rem,4.6vw,3.4rem);text-transform:uppercase;letter-spacing:-.02em;
-  line-height:1.05;font-weight:700;
-}
-body.theme-brutal .hero-title em{
-  font-style:normal;color:var(--text);background:var(--china);padding:0 .12em;
-}
-body.theme-brutal .narr-title{
-  font-size:clamp(1rem,1.5vw,1.25rem);text-transform:uppercase;letter-spacing:0;
-  line-height:1.4;font-weight:600;
-}
-body.theme-brutal .narr-title em{
-  font-style:normal;color:var(--text);background:var(--china);padding:0 .15em;
-  text-decoration:none;
-}
-body.theme-brutal .narr-title em.red{background:var(--china);color:var(--text)}
-body.theme-brutal .year-display{
-  font-size:clamp(2.6rem,5vw,3.8rem);letter-spacing:-.05em;font-weight:700;
-}
-body.theme-brutal .cl-title{
-  font-size:clamp(1.7rem,3.6vw,2.6rem);text-transform:uppercase;letter-spacing:-.02em;
-  line-height:1.15;font-weight:700;
-}
-body.theme-brutal .cl-title em{
-  font-style:normal;background:var(--china);color:var(--text);padding:0 .12em;
-}
-body.theme-brutal .block{border-radius:0}
-body.theme-brutal .block.dim{box-shadow:inset 0 0 0 0.5px rgba(0,0,0,.08)}
-body.theme-brutal .eyebrow{color:var(--text);background:var(--china);padding:.25em .5em;display:inline-block}
-body.theme-brutal .byline{color:var(--text)}
-body.theme-brutal .byline::before,
-body.theme-brutal .byline::after{background:var(--text);height:2px}
-body.theme-brutal .block{box-shadow:none}
-
-/* ============ JEWEL THEME — Instrument Serif sings in italic ============ */
-body.theme-jewel .hero-title em{font-style:italic;font-weight:400}
-body.theme-jewel .narr-title em{font-style:italic}
-body.theme-jewel .cl-title em{font-style:italic}
-body.theme-jewel .hero-title{letter-spacing:-.02em}
-
-/* ============ RISO THEME — Fraunces refinement ============ */
-body .hero-title{font-feature-settings:"ss01"}
-body .narr-title{font-feature-settings:"ss01"}
-
-/* Theme switcher */
-.theme-switcher{
-  position:fixed;top:1.1rem;right:1.1rem;z-index:200;
-  display:flex;gap:.3rem;padding:.35rem;
-  background:rgba(255,255,255,.7);backdrop-filter:blur(14px);
-  border:1px solid var(--border);border-radius:100px;
-}
-.th-btn{
-  font-family:var(--font-body);
-  display:flex;align-items:center;gap:.45rem;
-  padding:.4rem .85rem;border:none;background:transparent;cursor:pointer;
-  border-radius:100px;color:var(--muted);font-size:.66rem;
-  text-transform:uppercase;letter-spacing:.1em;font-weight:600;
-  transition:all .25s ease;
-}
-.th-btn:hover{color:var(--text)}
-.th-btn.active{background:var(--text);color:var(--bg)}
-.th-dots{display:inline-flex;gap:2px}
-.th-dots span{width:7px;height:7px;border-radius:50%;display:inline-block}
+/* Instrument Serif italics — used for em emphasis */
+.hero-title em{font-style:italic;font-weight:400}
+.narr-title em{font-style:italic;font-weight:400}
+.cl-title em{font-style:italic;font-weight:400}
 
 /* Responsive */
 @media (max-width:900px){
@@ -320,8 +212,6 @@ body .narr-title{font-feature-settings:"ss01"}
   .narr-title{font-size:1.1rem;min-height:auto}
   .narr-body{min-height:auto}
   .legend{gap:.9rem 1.3rem}
-  .theme-switcher{top:.6rem;right:.6rem;padding:.25rem}
-  .th-btn{padding:.32rem .55rem;font-size:.6rem;gap:.3rem}
 }
 </style>
 </head>
@@ -329,39 +219,11 @@ body .narr-title{font-feature-settings:"ss01"}
 
 <div class="scroll-progress" id="progress"></div>
 
-<!-- Theme switcher -->
-<div class="theme-switcher" id="theme-switcher">
-  <button class="th-btn active" data-th="riso">
-    <span class="th-dots">
-      <span style="background:#2438c4"></span>
-      <span style="background:#ff5a4d"></span>
-      <span style="background:#f5efe1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
-    </span>
-    Riso
-  </button>
-  <button class="th-btn" data-th="brutal">
-    <span class="th-dots">
-      <span style="background:#0a0a0a"></span>
-      <span style="background:#e6ff00"></span>
-      <span style="background:#f0ece4;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
-    </span>
-    Brutal
-  </button>
-  <button class="th-btn" data-th="jewel">
-    <span class="th-dots">
-      <span style="background:#1c4b3a"></span>
-      <span style="background:#8b1e2e"></span>
-      <span style="background:#e8e1cf;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></span>
-    </span>
-    Jewel
-  </button>
-</div>
-
 <!-- HERO -->
 <section id="hero">
   <div class="byline">A Data Story · 1995 — 2024</div>
-  <h1 class="hero-title">If 500 trials happened today,<br>only <em>100</em> would be American.</h1>
-  <p class="hero-sub">Each square is one of the world's clinical trial sites. Scroll to watch three decades of migration — from American dominance to a Pacific-led industry.</p>
+  <h1 class="hero-title">If 500 trials happened today,<br>only <em>100</em> would be in the United States.</h1>
+  <p class="hero-sub">Each square represents one clinical trial site somewhere in the world. From 1995 to 2024, the geography of clinical research shifted from the US to Asia. Scroll to see when, where, and why.</p>
   <div class="scroll-cue">
     <span>Scroll to begin</span>
     <div class="scroll-line"></div>
@@ -377,9 +239,9 @@ body .narr-title{font-feature-settings:"ss01"}
         <div class="year-sub" id="year-sub">Peak American Era</div>
       </div>
       <div class="narration">
-        <div class="narr-tag">The Story</div>
-        <h2 class="narr-title" id="narr-title">America runs <em>four in five</em> trials worldwide.</h2>
-        <p class="narr-body" id="narr-body">In the mid-90s the US was the unrivalled center of clinical research. 400 of every 500 trial sites were American — Europe held most of the rest. China and India were rounding errors.</p>
+        <div class="narr-tag">What Changed</div>
+        <h2 class="narr-title" id="narr-title">About <em>80%</em> of trial sites are in the United States.</h2>
+        <p class="narr-body" id="narr-body">The 1992 Prescription Drug User Fee Act (PDUFA) accelerated FDA reviews, concentrating pharma research at home. China and India did not yet have the regulatory infrastructure to host major international trials.</p>
       </div>
     </div>
     <div class="ribbon-wrap">
@@ -396,9 +258,9 @@ body .narr-title{font-feature-settings:"ss01"}
 <!-- OUTRO -->
 <section id="outro">
   <div class="cl-inner">
-    <p class="eyebrow">The Migration, In One Image</p>
-    <h2 class="cl-title">300 American sites <em>changed hands</em><br>in three decades.</h2>
-    <p class="cl-body">No single year decided it. Each year shaved a few points off the US share — to China, then India, then everywhere with patients and lower costs. The cumulative effect: a reshaped industry.</p>
+    <p class="eyebrow">Three Decades, Three Drivers</p>
+    <h2 class="cl-title">A reshaped industry — by <em>regulation</em>, <em>cost</em>, and <em>patient access</em>.</h2>
+    <p class="cl-body">Three forces moved the trial map: regulatory reforms abroad (China's 2015 CFDA overhaul, India's 2005 Patents Act, the EU's 2014 Clinical Trials Regulation), rising trial costs in the US, and large untreated patient populations across Asia. The industry still discovers drugs in America. It increasingly tests them elsewhere.</p>
     <a href="index.html" class="back-link">Back to full story</a>
   </div>
 </section>
@@ -415,44 +277,44 @@ const COLS = 50;
 const YEARS = [
   {
     year:1995, sub:'Peak American Era',
-    title:'America runs <em>four in five</em> trials worldwide.',
-    body:'In the mid-90s the US was the unrivalled center of clinical research. 400 of every 500 trial sites were American — Europe held most of the rest. China and India were rounding errors.',
+    title:'About <em>80%</em> of trial sites are in the United States.',
+    body:'The 1992 Prescription Drug User Fee Act (PDUFA) accelerated FDA reviews, concentrating pharma research at home. China and India did not yet have the regulatory infrastructure to host major international trials.',
     dist:{us:400, eu:60, ee:10, latam:10, china:5, india:0, kr:5, other:10}
   },
   {
-    year:2000, sub:'The First Cracks',
-    title:'Eastern Europe and Latin America <em>open up</em>.',
-    body:'Post-Soviet reforms opened Poland, Hungary, and the Czech Republic. Brazil and Argentina joined the trial map too. The US share slipped for the first time — from 80% to 70% in five years.',
+    year:2000, sub:'Trial Activity Spreads',
+    title:'Eastern Europe and Latin America become trial venues.',
+    body:'Poland, Hungary, and the Czech Republic — preparing for EU accession — harmonized their trial regulations with European standards. Brazil established ANVISA in 1999. The US share fell from 80% to about 70%.',
     dist:{us:350, eu:70, ee:25, latam:20, china:10, india:5, kr:5, other:15}
   },
   {
-    year:2005, sub:'Asia Wakes Up',
-    title:'China and India <em>arrive</em> on the map.',
-    body:'China&apos;s SFDA reforms and India&apos;s 2005 patent law opened Asia to global pharma. The first wave of large multinational trials began enrolling outside Western markets.',
+    year:2005, sub:'Asia Opens',
+    title:'India and China host their first wave of <em>multinational trials</em>.',
+    body:'India\'s 2005 Patents Act, compliant with the WTO TRIPS agreement, opened the country to global pharma research. China\'s 2002 Drug Registration Regulation began permitting foreign-sponsored trials. Phase 3 studies began enrolling across multiple Asian sites.',
     dist:{us:275, eu:90, ee:35, latam:30, china:30, india:20, kr:10, other:10}
   },
   {
-    year:2010, sub:'Parity Approaches',
-    title:'For the first time, more trial sites are <em class="red">non-US</em> than US.',
-    body:'2010 marks the crossover. Phase 3 trials need thousands of patients — and they were cheaper to find abroad. India hit a peak before regulatory tightening; China kept growing fast.',
+    year:2010, sub:'The Crossover',
+    title:'<em class="red">Non-US sites exceed US sites</em> for the first time.',
+    body:'Phase 3 trials, which require thousands of patients, became substantially cheaper to run abroad. India\'s share peaked around 8% before 2013 Schedule Y amendments tightened oversight and reduced new approvals. China continued growing on the strength of patient volume.',
     dist:{us:210, eu:90, ee:40, latam:30, china:60, india:40, kr:15, other:15}
   },
   {
-    year:2015, sub:'China Surges',
-    title:'China <em class="red">overtakes Europe</em> as the #2 trial host.',
-    body:'China\'s Hua drug-review reforms and CDE modernization made it the fastest-growing trial venue worldwide. Local Chinese pharma began running its own trials. India\'s share consolidated.',
+    year:2015, sub:'China Reforms',
+    title:'China <em class="red">overhauls its drug review system</em>.',
+    body:'Under CFDA commissioner Bi Jingquan, the August 2015 reforms (Order 44) cleared a 22,000-application backlog and shortened review timelines. China became the second-largest trial venue worldwide. Domestic Chinese pharma began running its own multinational studies.',
     dist:{us:160, eu:85, ee:40, latam:30, china:100, india:50, kr:20, other:15}
   },
   {
-    year:2020, sub:'The New Order',
-    title:'China <em class="red">passes the US</em> in active trial sites.',
-    body:'Even through COVID, China kept enrolling. By 2020, China hosted more industry-sponsored trial sites than the US for the first time in modern history — and the gap kept widening.',
+    year:2020, sub:'China Passes the US',
+    title:'China hosts <em class="red">more industry trial sites</em> than the United States.',
+    body:'China joined the International Council for Harmonisation (ICH) in 2017 and rewrote its Drug Administration Law in 2019, aligning Chinese standards with Western frameworks. COVID-19 disrupted Western recruitment while Chinese enrollment continued.',
     dist:{us:125, eu:80, ee:40, latam:25, china:140, india:60, kr:20, other:10}
   },
   {
-    year:2024, sub:'Where We Are',
-    title:'<em class="red">One in five</em> trials happens in America.',
-    body:'The US still leads in early-phase science and drug discovery. But the pivotal Phase 3 trials that decide whether a drug works — and reaches market — increasingly happen elsewhere. 73% of 2024 Phase 3 trials had no US sites at all.',
+    year:2024, sub:'Today',
+    title:'About <em class="red">one in five</em> trial sites is American.',
+    body:'The US still leads in early-phase research and new drug discovery. But pivotal Phase 3 trials — those that determine whether a drug reaches market — increasingly happen outside the US. In 2024, 73% of new industry Phase 3 trials had no US sites at all.',
     dist:{us:100, eu:75, ee:40, latam:25, china:160, india:70, kr:20, other:10}
   }
 ];
@@ -461,7 +323,16 @@ const YEARS = [
 // on the left, emerging Asia on the right — so US shrinks leftward and China
 // grows rightward as years advance.
 const COUNTRY_ORDER = ['us','eu','ee','latam','other','kr','india','china'];
-const COUNTRY_NAMES = {us:'United States',china:'China',india:'India',eu:'EU & UK',ee:'Eastern Europe',latam:'Latin America',kr:'South Korea',other:'Rest of World'};
+const COUNTRY_NAMES = {
+  us:    '🇺🇸 United States',
+  china: '🇨🇳 China',
+  india: '🇮🇳 India',
+  eu:    '🇪🇺 EU & UK',
+  ee:    '🇵🇱 Eastern Europe',
+  latam: '🇧🇷 Latin America',
+  kr:    '🇰🇷 South Korea',
+  other: '🌍 Rest of World'
+};
 const COUNTRY_VAR = {us:'--us',china:'--china',india:'--india',eu:'--eu',ee:'--ee',latam:'--latam',kr:'--kr',other:'--other'};
 
 /* ============ BUILD GRID ============ */
@@ -636,20 +507,6 @@ currentNarrativeIdx = 0;
 window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {passive:true});
 window.addEventListener('resize', onScroll);
 onScroll();
-
-/* ============ THEME SWITCHER ============ */
-const themeBtns = document.querySelectorAll('.th-btn');
-const savedTheme = localStorage.getItem('blocksTheme') || 'riso';
-function applyTheme(t){
-  document.body.classList.remove('theme-riso','theme-brutal','theme-jewel');
-  if(t!=='riso') document.body.classList.add('theme-'+t);
-  themeBtns.forEach(b=>b.classList.toggle('active', b.dataset.th===t));
-  localStorage.setItem('blocksTheme', t);
-}
-themeBtns.forEach(b=>{
-  b.addEventListener('click', ()=>applyTheme(b.dataset.th));
-});
-applyTheme(savedTheme);
 </script>
 </body>
 </html>
