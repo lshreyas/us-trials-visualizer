@@ -8,13 +8,49 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#060608;--bg2:#0a0c14;
-  --us:#4facfe;--china:#f56565;--india:#f6ad55;--eu:#68d391;
-  --ee:#34d399;--latam:#a78bfa;--kr:#fbbf24;--other:#4a5568;
-  --text:#f0f4f8;--muted:#718096;--border:rgba(255,255,255,0.07);
+  /* Default palette = COOL (cool sophisticated) */
+  --bg:#0c1220;--bg2:#0a0c14;
+  --us:#38bdf8;--china:#ec4899;--india:#fb923c;--eu:#34d399;
+  --ee:#2dd4bf;--latam:#a78bfa;--kr:#facc15;--other:#475569;
+  --us-glow:56,189,248;
+  --china-glow:236,72,153;
+  --india-glow:251,146,60;
+  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#0f1a30 0%,#0c1220 100%);
+  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#1a1230,#0c1220);
+  --text:#f0f4f8;--muted:#94a3b8;--border:rgba(255,255,255,0.07);
+  --accent-grad:linear-gradient(135deg,var(--us),#7dd3fc);
+  --shift-grad:linear-gradient(135deg,var(--china),var(--india));
+}
+/* WARM palette */
+body.palette-warm{
+  --bg:#1a1612;--bg2:#221c16;
+  --us:#f0e6d2;--china:#b91c1c;--india:#d97706;--eu:#166534;
+  --ee:#047857;--latam:#7c3aed;--kr:#ea580c;--other:#44403c;
+  --us-glow:240,230,210;
+  --china-glow:185,28,28;
+  --india-glow:217,119,6;
+  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#2a2018 0%,#1a1612 100%);
+  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#2a1818,#1a1612);
+  --text:#f5ede0;--muted:#a8998a;--border:rgba(240,230,210,0.08);
+  --accent-grad:linear-gradient(135deg,#f0e6d2,#fff8e7);
+  --shift-grad:linear-gradient(135deg,var(--china),var(--india));
+}
+/* MONO + 2 accents palette */
+body.palette-mono{
+  --bg:#0a0a0c;--bg2:#101013;
+  --us:#cbd5e1;--china:#f59e0b;--india:#71717a;--eu:#52525b;
+  --ee:#52525b;--latam:#52525b;--kr:#52525b;--other:#3f3f46;
+  --us-glow:203,213,225;
+  --china-glow:245,158,11;
+  --india-glow:113,113,122;
+  --hero-bg:radial-gradient(ellipse 80% 60% at 50% 40%,#16161a 0%,#0a0a0c 100%);
+  --outro-bg:radial-gradient(ellipse 70% 50% at 50% 60%,#1f1a10,#0a0a0c);
+  --text:#f4f4f5;--muted:#71717a;--border:rgba(255,255,255,0.06);
+  --accent-grad:linear-gradient(135deg,#cbd5e1,#f1f5f9);
+  --shift-grad:linear-gradient(135deg,#f59e0b,#fbbf24);
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden;transition:background .5s ease,color .5s ease}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
 
@@ -22,8 +58,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #hero{
   height:100vh;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;padding:2rem;position:relative;
-  background:radial-gradient(ellipse 80% 60% at 50% 40%,#0a1628 0%,#060608 100%);
-  overflow:hidden;
+  background:var(--hero-bg);
+  overflow:hidden;transition:background .5s ease;
 }
 .eyebrow{
   font-size:.75rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
@@ -59,12 +95,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .narration{max-width:520px}
 .year-display{
   font-family:'DM Serif Display',serif;font-size:clamp(4rem,8vw,7rem);line-height:1;
-  background:linear-gradient(135deg,var(--us),#7dd3fc);
+  background:var(--accent-grad);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:.3rem;font-variant-numeric:tabular-nums;
   transition:background .8s ease;
 }
-.year-display.shift{background:linear-gradient(135deg,var(--china),var(--india));
+.year-display.shift{background:var(--shift-grad);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .year-sub{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;margin-bottom:2rem}
 .narr-title{
@@ -80,25 +116,46 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .grid-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
 .grid-label strong{color:var(--text);font-weight:600}
 #block-grid{
-  display:grid;grid-template-columns:repeat(10,1fr);gap:6px;
-  width:420px;height:420px;
+  display:grid;grid-template-columns:repeat(10,1fr);gap:9px;
+  width:440px;height:440px;
+  padding:6px;
 }
 .block{
-  border-radius:3px;background:var(--us);
-  transition:background .9s cubic-bezier(.4,0,.2,1),transform .9s cubic-bezier(.4,0,.2,1);
-  position:relative;
+  border-radius:5px;background:var(--us);position:relative;
+  transition:background-color .9s cubic-bezier(.4,0,.2,1),
+             box-shadow .9s cubic-bezier(.4,0,.2,1),
+             transform .6s cubic-bezier(.4,0,.2,1);
+  /* inner sheen: subtle highlight top-left, darker bottom-right */
+  background-image:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 45%,rgba(0,0,0,.2) 100%);
+  background-blend-mode:overlay;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.25),
+    0 2px 6px rgba(0,0,0,.35);
 }
-.block.us{background:var(--us);box-shadow:0 0 12px rgba(79,172,254,.25)}
-.block.china{background:var(--china);box-shadow:0 0 12px rgba(245,101,101,.25)}
-.block.india{background:var(--india);box-shadow:0 0 10px rgba(246,173,85,.22)}
-.block.eu{background:var(--eu)}
-.block.ee{background:var(--ee)}
-.block.latam{background:var(--latam)}
-.block.kr{background:var(--kr)}
-.block.other{background:var(--other)}
+.block.us{background-color:var(--us);box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -1px 0 rgba(0,0,0,.2),
+    0 2px 8px rgba(0,0,0,.4),
+    0 0 14px rgba(var(--us-glow),.35);}
+.block.china{background-color:var(--china);box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.25),
+    0 2px 8px rgba(0,0,0,.4),
+    0 0 16px rgba(var(--china-glow),.45);}
+.block.india{background-color:var(--india);box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    inset 0 -1px 0 rgba(0,0,0,.25),
+    0 2px 7px rgba(0,0,0,.4),
+    0 0 14px rgba(var(--india-glow),.4);}
+.block.eu{background-color:var(--eu)}
+.block.ee{background-color:var(--ee)}
+.block.latam{background-color:var(--latam)}
+.block.kr{background-color:var(--kr)}
+.block.other{background-color:var(--other)}
 
 /* Legend */
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;width:420px}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;width:440px}
 .leg-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.78rem;
@@ -120,7 +177,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 #outro{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:6rem 2rem;
-  background:radial-gradient(ellipse 70% 50% at 50% 60%,#0a0a20,#060608);
+  background:var(--outro-bg);transition:background .5s ease;
 }
 .cl-inner{max-width:860px}
 .cl-title{
@@ -141,17 +198,66 @@ footer p{font-size:.72rem;color:var(--muted);line-height:1.8}
 
 @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
 
+/* Palette switcher */
+.palette-switcher{
+  position:fixed;top:1.2rem;right:1.2rem;z-index:200;
+  display:flex;gap:.4rem;padding:.45rem;
+  background:rgba(8,10,18,.7);backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:100px;
+}
+.pal-btn{
+  display:flex;align-items:center;gap:.4rem;
+  padding:.4rem .8rem;border:none;background:transparent;cursor:pointer;
+  border-radius:100px;color:var(--muted);font-family:inherit;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.1em;font-weight:600;
+  transition:all .25s ease;
+}
+.pal-btn:hover{color:var(--text)}
+.pal-btn.active{background:rgba(255,255,255,.08);color:var(--text)}
+.pal-swatches{display:flex;gap:2px}
+.pal-sw{width:8px;height:8px;border-radius:50%}
+
 /* Responsive */
 @media (max-width:1000px){
   #stage{grid-template-columns:1fr;padding:3rem 2rem;gap:1.5rem;height:auto;min-height:100vh}
-  #block-grid{width:min(420px,80vw);height:min(420px,80vw)}
-  .legend{width:min(420px,80vw)}
+  #block-grid{width:min(440px,82vw);height:min(440px,82vw)}
+  .legend{width:min(440px,82vw)}
+  .palette-switcher{top:.7rem;right:.7rem;padding:.3rem}
+  .pal-btn{padding:.35rem .55rem;font-size:.65rem}
 }
 </style>
 </head>
 <body>
 
 <div class="scroll-progress" id="progress"></div>
+
+<!-- Palette switcher -->
+<div class="palette-switcher" id="pal-switch">
+  <button class="pal-btn active" data-pal="cool">
+    <span class="pal-swatches">
+      <span class="pal-sw" style="background:#38bdf8"></span>
+      <span class="pal-sw" style="background:#ec4899"></span>
+      <span class="pal-sw" style="background:#fb923c"></span>
+    </span>
+    Cool
+  </button>
+  <button class="pal-btn" data-pal="warm">
+    <span class="pal-swatches">
+      <span class="pal-sw" style="background:#f0e6d2"></span>
+      <span class="pal-sw" style="background:#b91c1c"></span>
+      <span class="pal-sw" style="background:#d97706"></span>
+    </span>
+    Warm
+  </button>
+  <button class="pal-btn" data-pal="mono">
+    <span class="pal-swatches">
+      <span class="pal-sw" style="background:#cbd5e1"></span>
+      <span class="pal-sw" style="background:#f59e0b"></span>
+      <span class="pal-sw" style="background:#52525b"></span>
+    </span>
+    Mono
+  </button>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -413,6 +519,20 @@ currentNarrativeIdx = 0;
 window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {passive:true});
 window.addEventListener('resize', onScroll);
 onScroll();
+
+/* ============ PALETTE SWITCHER ============ */
+const palBtns = document.querySelectorAll('.pal-btn');
+const savedPal = localStorage.getItem('blocksPalette') || 'cool';
+function applyPalette(p){
+  document.body.classList.remove('palette-cool','palette-warm','palette-mono');
+  if(p!=='cool') document.body.classList.add('palette-'+p);
+  palBtns.forEach(b=>b.classList.toggle('active', b.dataset.pal===p));
+  localStorage.setItem('blocksPalette', p);
+}
+palBtns.forEach(b=>{
+  b.addEventListener('click', ()=>applyPalette(b.dataset.pal));
+});
+applyPalette(savedPal);
 </script>
 </body>
 </html>
