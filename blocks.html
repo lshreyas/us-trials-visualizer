@@ -60,9 +60,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflo
 .hero-title em{font-style:italic;color:var(--us)}
 .hero-sub{
   font-family:var(--font-body);
-  font-size:clamp(.9rem,1.2vw,1.02rem);color:var(--muted);max-width:580px;
+  font-size:clamp(.9rem,1.2vw,1.02rem);color:var(--muted);max-width:620px;
   line-height:1.75;margin-bottom:3rem;font-weight:400;
 }
+.hero-sub strong{color:var(--text);font-weight:500;border-bottom:1px dotted var(--rule);padding-bottom:1px}
 .byline{
   font-family:var(--font-body);
   font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;
@@ -222,8 +223,8 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 <!-- HERO -->
 <section id="hero">
   <div class="byline">A Data Story · 1995 — 2024</div>
-  <h1 class="hero-title">If 500 trials happened today,<br>only <em>100</em> would be in the United States.</h1>
-  <p class="hero-sub">Each square represents one clinical trial site somewhere in the world. From 1995 to 2024, the geography of clinical research shifted from the US to Asia. Scroll to see when, where, and why.</p>
+  <h1 class="hero-title">If 500 trial sites were active today,<br>only <em>100</em> would be in the United States.</h1>
+  <p class="hero-sub">Each square represents one <strong>trial site</strong> — a hospital or clinic where a study is being conducted. A single Phase 3 study often runs at hundreds of sites worldwide, so a country's site count measures how much of the global research workload it carries. From 1995 to 2024, that workload shifted from the US to Asia.</p>
   <div class="scroll-cue">
     <span>Scroll to begin</span>
     <div class="scroll-line"></div>
@@ -260,7 +261,7 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
   <div class="cl-inner">
     <p class="eyebrow">Three Decades, Three Drivers</p>
     <h2 class="cl-title">A reshaped industry — by <em>regulation</em>, <em>cost</em>, and <em>patient access</em>.</h2>
-    <p class="cl-body">Three forces moved the trial map: regulatory reforms abroad (China's 2015 CFDA overhaul, India's 2005 Patents Act, the EU's 2014 Clinical Trials Regulation), rising trial costs in the US, and large untreated patient populations across Asia. The industry still discovers drugs in America. It increasingly tests them elsewhere.</p>
+    <p class="cl-body">Three forces moved the trial map: regulatory reforms abroad (China's 2015 CFDA overhaul, India's 2005 Patents Act, the EU's 2014 Clinical Trials Regulation), the rising cost of running a US site, and large untreated patient populations across Asia. The industry still discovers drugs in America. It increasingly tests them elsewhere.</p>
     <a href="index.html" class="back-link">Back to full story</a>
   </div>
 </section>
