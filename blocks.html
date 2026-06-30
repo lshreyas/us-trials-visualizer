@@ -226,31 +226,37 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
   line-height:1.75;max-width:600px;margin-bottom:3rem;
 }
 
-/* — Cost bars + recruit chart, side by side — */
-.econ-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start}
+/* — Cost bars + recruit chart, side by side, equal panels — */
+.econ-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:stretch}
+.chart-panel{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.8rem 1.6rem;
+  display:flex;flex-direction:column;min-height:340px;
+}
+.chart-panel > .chart-body{flex:1;display:flex;flex-direction:column;justify-content:center}
 .chart-tag{
   font-family:var(--font-body);font-size:.6rem;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.22em;font-weight:600;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:.22em;font-weight:600;margin-bottom:1.4rem;
 }
 .cost-row{
-  display:flex;align-items:center;margin-bottom:.85rem;
+  display:flex;align-items:center;margin-bottom:.7rem;
   opacity:0;transform:translateX(-12px);transition:opacity .6s ease,transform .6s ease;
 }
+.cost-row:last-child{margin-bottom:0}
 .cost-row.vis{opacity:1;transform:translateX(0)}
 .cost-lbl{
-  width:140px;font-family:var(--font-body);font-size:.78rem;color:var(--text);
+  width:140px;font-family:var(--font-body);font-size:.76rem;color:var(--text);
   flex-shrink:0;display:flex;align-items:center;gap:.4rem;
 }
 .cost-track{
-  flex:1;height:26px;background:rgba(42,31,26,.06);border-radius:3px;
+  flex:1;height:24px;background:rgba(42,31,26,.06);border-radius:3px;
   overflow:hidden;border:1px solid rgba(42,31,26,.05);
 }
 .cost-fill{
   height:100%;border-radius:3px;width:0;transition:width 1.1s cubic-bezier(.4,0,.2,1);
-  display:flex;align-items:center;padding-right:.6rem;justify-content:flex-end;
+  display:flex;align-items:center;padding-right:.55rem;justify-content:flex-end;
 }
 .cost-fill span{
-  font-family:var(--font-body);font-size:.72rem;font-weight:600;color:#fff;white-space:nowrap;
+  font-family:var(--font-body);font-size:.7rem;font-weight:600;color:#fff;white-space:nowrap;
   text-shadow:0 1px 1px rgba(0,0,0,.15);
 }
 .cf-us{background:var(--us)}
@@ -259,10 +265,6 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 .cf-latam{background:var(--latam)}
 .cf-china{background:var(--china)}
 .cf-india{background:var(--india)}
-
-.recruit-panel{
-  background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:2rem 1.8rem;
-}
 
 /* — Phase section — */
 .phase-grid{
@@ -322,8 +324,8 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 <!-- HERO -->
 <section id="hero">
   <div class="byline">A Data Story · 1995 — 2024</div>
-  <h1 class="hero-title">If 500 trial sites were active today,<br>only <em>100</em> would be in the United States.</h1>
-  <p class="hero-sub">Each square represents one <strong>trial site</strong> — a hospital or clinic where a study is being conducted. A single Phase 3 study often runs at hundreds of sites worldwide, so a country's site count measures how much of the global research workload it carries. From 1995 to 2024, that workload shifted from the US to Asia.</p>
+  <h1 class="hero-title">The US still invents <em>most new drugs</em>.<br>The world tests them.</h1>
+  <p class="hero-sub">Of every 500 industry trial sites active worldwide today, only 100 are in the United States — even though US pharma still originates the majority of new drug candidates. Each square below represents one <strong>trial site</strong>, the hospital or clinic where a study is being conducted; a single Phase 3 study can run at hundreds of sites across dozens of countries. Scroll to see how that work shifted from 1995 to 2024.</p>
   <div class="scroll-cue">
     <span>Scroll to begin</span>
     <div class="scroll-line"></div>
@@ -359,16 +361,16 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 <section class="story-section">
   <div class="section-inner">
     <div class="section-tag">The Economics</div>
-    <h2 class="section-title">A US trial patient costs <em>10×</em> more than one in India.</h2>
-    <p class="section-body">Running a 3,000-patient Phase 3 study costs about $124 million in the United States. The same study in India costs under $15 million. Recruitment is also slower: a US site needs nearly three years to enroll 1,000 patients that a Chinese site can find in a year.</p>
+    <h2 class="section-title">A US trial patient costs <em>nearly 7×</em> more than one in China.</h2>
+    <p class="section-body">Running a 3,000-patient Phase 3 study costs about $124 million in the United States — and about $19 million in China. The US is also slower: enrolling 1,000 patients takes nearly three years here, but just one year in China.</p>
     <div class="econ-grid">
-      <div>
+      <div class="chart-panel">
         <div class="chart-tag">Average cost per trial patient (USD)</div>
-        <div id="cost-bars"></div>
+        <div class="chart-body"><div id="cost-bars"></div></div>
       </div>
-      <div class="recruit-panel">
-        <div class="chart-tag">Months to recruit 1,000 patients · Phase 3 oncology (2020–24 avg)</div>
-        <div id="recruit-chart" style="height:240px"></div>
+      <div class="chart-panel">
+        <div class="chart-tag">Months to recruit 1,000 patients · Phase 3 oncology</div>
+        <div class="chart-body"><div id="recruit-chart" style="height:230px"></div></div>
       </div>
     </div>
   </div>
@@ -391,9 +393,9 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 <!-- OUTRO -->
 <section id="outro">
   <div class="cl-inner">
-    <p class="eyebrow">Three Decades, Three Drivers</p>
-    <h2 class="cl-title">A reshaped industry — by <em>regulation</em>, <em>cost</em>, and <em>patient access</em>.</h2>
-    <p class="cl-body">Three forces moved the trial map: regulatory reforms abroad (China's 2015 CFDA overhaul, India's 2005 Patents Act, the EU's 2014 Clinical Trials Regulation), the rising cost of running a US site, and large untreated patient populations across Asia. The industry still discovers drugs in America. It increasingly tests them elsewhere.</p>
+    <p class="eyebrow">The Pattern</p>
+    <h2 class="cl-title"><em>Discovered</em> in America. <em>Tested</em> elsewhere.</h2>
+    <p class="cl-body">Three forces moved the trial map: regulatory reforms abroad (China's 2015 CFDA overhaul, India's 2005 Patents Act, the EU's 2014 Clinical Trials Regulation), the cost of running a US trial site, and the size of patient populations across Asia. Most new drugs still originate in American labs. But the trials that decide whether they work are increasingly run almost everywhere else.</p>
     <a href="index.html" class="back-link">Back to full story</a>
   </div>
 </section>
@@ -446,8 +448,8 @@ const YEARS = [
   },
   {
     year:2024, sub:'Today',
-    title:'About <em class="red">one in five</em> trial sites is American.',
-    body:'The US still leads in early-phase research and new drug discovery. But pivotal Phase 3 trials — those that determine whether a drug reaches market — increasingly happen outside the US. In 2024, 73% of new industry Phase 3 trials had no US sites at all.',
+    title:'Only <em class="red">one in five</em> trial sites is American.',
+    body:'The US still leads in early-phase research and new drug discovery — most new molecules still originate in American labs. But pivotal Phase 3 trials, those that determine whether a drug reaches market, increasingly happen outside the US. In 2024, 73% of new industry Phase 3 trials had no US sites at all.',
     dist:{us:100, eu:75, ee:40, latam:25, china:160, india:70, kr:20, other:10}
   }
 ];
@@ -690,7 +692,7 @@ function drawCost(){
 function drawRecruit(){
   const el = document.getElementById('recruit-chart');
   el.innerHTML = '';
-  const W = el.clientWidth, H = 240, m = {t:5,r:14,b:32,l:130};
+  const W = el.clientWidth, H = 230, m = {t:5,r:14,b:32,l:140};
   const w = W-m.l-m.r, h = H-m.t-m.b;
   const svg = d3.select(el).append('svg').attr('width',W).attr('height',H);
   const g = svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
