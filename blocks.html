@@ -306,6 +306,32 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
 }
 .section-callout strong{font-style:normal;color:var(--us);font-weight:500}
 
+/* — Story anchor (used in Act 3 sintilimab moment) — */
+.story-anchor{
+  display:grid;grid-template-columns:160px 1fr;gap:2.5rem;align-items:start;
+  margin-top:3rem;padding:2.5rem 2.2rem;background:var(--bg);
+  border:1px solid var(--border);border-radius:8px;border-left:3px solid var(--china);
+}
+.anchor-year{
+  font-family:var(--font-display);font-size:clamp(2.4rem,4vw,3.2rem);color:var(--china);
+  font-weight:400;line-height:1;letter-spacing:-.02em;
+}
+.anchor-year-sub{
+  font-family:var(--font-body);font-size:.62rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.22em;margin-top:.6rem;font-weight:600;
+}
+.anchor-title{
+  font-family:var(--font-display);font-size:clamp(1.4rem,2vw,1.7rem);color:var(--text);
+  margin-bottom:1rem;font-weight:400;letter-spacing:-.01em;line-height:1.25;
+}
+.anchor-body{
+  font-family:var(--font-body);font-size:.9rem;color:var(--text);opacity:.82;
+  line-height:1.75;margin-bottom:1rem;
+}
+.anchor-body:last-child{margin-bottom:0}
+.anchor-body strong{color:var(--text);opacity:1;font-weight:600}
+.anchor-body em{color:var(--china);font-style:italic;opacity:1}
+
 /* Recruit + phase chart SVG text styling (set via JS attributes that read these) */
 .chart-axis text{font-family:var(--font-body);font-size:11px;fill:var(--muted)}
 .chart-bar-label{font-family:var(--font-body);font-size:11px;font-weight:600;fill:var(--text)}
@@ -322,6 +348,7 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
   .econ-grid{grid-template-columns:1fr;gap:2.5rem}
   .phase-grid{grid-template-columns:1fr;gap:1rem}
   .phase-desc{min-height:auto}
+  .story-anchor{grid-template-columns:1fr;gap:1rem;padding:1.8rem 1.5rem}
 }
 </style>
 </head>
@@ -395,6 +422,18 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
     <div class="phase-chart-wrap">
       <div class="chart-tag">Share of trial sites: US vs Non-US, by phase (2024)</div>
       <div id="phase-chart" style="height:280px"></div>
+    </div>
+
+    <div class="story-anchor">
+      <div>
+        <div class="anchor-year">2022</div>
+        <div class="anchor-year-sub">The Sintilimab Moment</div>
+      </div>
+      <div>
+        <h3 class="anchor-title">The first crack in a structure that held for decades.</h3>
+        <p class="anchor-body">When Eli Lilly and Innovent sought FDA approval for sintilimab — a Chinese-developed cancer drug — the agency rejected it. Not because the drug didn't work, but because the entire pivotal Phase 3 trial had been conducted in China, and <strong>none of the data came from US patients</strong>. The FDA ruled the results weren't generalizable to American populations.</p>
+        <p class="anchor-body">It was the first time the agency had refused a drug on those grounds. US labs still originate roughly <strong>60% of new molecular entities</strong> approved by the FDA each year — but the trials that prove they work are now run elsewhere. <em>Discovery stayed home. Execution left.</em></p>
+      </div>
     </div>
   </div>
 </section>
