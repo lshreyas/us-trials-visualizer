@@ -298,6 +298,14 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
   background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;
 }
 
+/* — Section callout (used in Act 2) — */
+.section-callout{
+  font-family:var(--font-display);font-size:clamp(1.1rem,1.7vw,1.4rem);line-height:1.5;
+  color:var(--text);max-width:780px;margin:2.8rem auto 0;padding:2rem 0 0;
+  border-top:1px solid var(--border);font-style:italic;font-weight:400;text-align:center;
+}
+.section-callout strong{font-style:normal;color:var(--us);font-weight:500}
+
 /* Recruit + phase chart SVG text styling (set via JS attributes that read these) */
 .chart-axis text{font-family:var(--font-body);font-size:11px;fill:var(--muted)}
 .chart-bar-label{font-family:var(--font-body);font-size:11px;font-weight:600;fill:var(--text)}
@@ -357,7 +365,41 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
   </div>
 </div>
 
-<!-- ECONOMICS SECTION -->
+<!-- ACT 2: THE BIGGER PIE -->
+<section class="story-section">
+  <div class="section-inner">
+    <div class="section-tag">The Bigger Pie</div>
+    <h2 class="section-title">More people get drugs tested for them <em>than ever in history</em>.</h2>
+    <p class="section-body">Total participants in industry-sponsored trials grew from roughly 2.5 million in 1995 to about 40 million today. The "American decline" partly reflects a denominator that doubled, then doubled again — humanity gained unprecedented access to experimental therapies, even as the US share shrank.</p>
+    <div class="econ-grid">
+      <div class="chart-panel">
+        <div class="chart-tag">Estimated annual participants in industry trials, worldwide</div>
+        <div class="chart-body"><div id="participants-chart" style="height:230px"></div></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-tag">Trial sites per million people · 2024</div>
+        <div class="chart-body"><div id="per-capita-bars"></div></div>
+      </div>
+    </div>
+    <p class="section-callout">Per capita, the US still leads. An American is <strong>2.6× more likely</strong> than a Chinese citizen to live near an active trial site — and <strong>6× more likely</strong> than someone in India. The shift is real. The framing matters.</p>
+  </div>
+</section>
+
+<!-- ACT 3: THE ASYMMETRY (Phase section, was below Economics) -->
+<section class="story-section alt">
+  <div class="section-inner">
+    <div class="section-tag">The Discovery–Execution Split</div>
+    <h2 class="section-title">Phase 3 went global. <em>Phase 1</em> stayed home.</h2>
+    <p class="section-body">Early-phase studies need specialized labs, complex monitoring, and small cohorts of carefully chosen patients — that work stays anchored to the US and Western Europe. Late-phase pivotal trials, which need thousands of patients to prove a drug works, have gone decisively international.</p>
+    <div class="phase-grid" id="phase-grid"></div>
+    <div class="phase-chart-wrap">
+      <div class="chart-tag">Share of trial sites: US vs Non-US, by phase (2024)</div>
+      <div id="phase-chart" style="height:280px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT 4: THE ECONOMICS -->
 <section class="story-section">
   <div class="section-inner">
     <div class="section-tag">The Economics</div>
@@ -372,20 +414,6 @@ footer p{font-family:var(--font-body);font-size:.68rem;color:var(--muted);line-h
         <div class="chart-tag">Months to recruit 1,000 patients · Phase 3 oncology</div>
         <div class="chart-body"><div id="recruit-chart" style="height:230px"></div></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- PHASE SECTION -->
-<section class="story-section alt">
-  <div class="section-inner">
-    <div class="section-tag">Not All Phases Are Equal</div>
-    <h2 class="section-title">Phase 3 went global. <em>Phase 1</em> stayed home.</h2>
-    <p class="section-body">Early-phase studies need specialized labs, complex monitoring, and small numbers of carefully chosen patients — that work stays anchored to the US and Western Europe. Late-phase pivotal trials, which need thousands of patients to prove a drug works, have gone decisively international.</p>
-    <div class="phase-grid" id="phase-grid"></div>
-    <div class="phase-chart-wrap">
-      <div class="chart-tag">Share of trial sites: US vs Non-US, by phase (2024)</div>
-      <div id="phase-chart" style="height:280px"></div>
     </div>
   </div>
 </section>
@@ -643,6 +671,96 @@ window.addEventListener('scroll', ()=>{ requestAnimationFrame(onScroll); }, {pas
 window.addEventListener('resize', onScroll);
 onScroll();
 
+/* ============ ACT 2: PARTICIPANTS + PER-CAPITA ============ */
+const participantsData = [
+  {year:1995, m:2.5}, {year:2000, m:4},   {year:2005, m:8},
+  {year:2010, m:14},  {year:2015, m:22},  {year:2020, m:32},
+  {year:2024, m:42}
+];
+
+const perCapitaData = [
+  {label:'🇺🇸 United States', val:10.2, varName:'--us'},
+  {label:'🇪🇺 EU & UK',        val:5.0,  varName:'--eu'},
+  {label:'🇨🇳 China',           val:3.9,  varName:'--china'},
+  {label:'🇮🇳 India',           val:1.7,  varName:'--india'},
+  {label:'🇧🇷 Latin America',   val:1.3,  varName:'--latam'}
+];
+
+function drawParticipants(){
+  const el = document.getElementById('participants-chart');
+  el.innerHTML = '';
+  const W = el.clientWidth, H = 230, m = {t:18, r:14, b:30, l:42};
+  const w = W-m.l-m.r, h = H-m.t-m.b;
+  const svg = d3.select(el).append('svg').attr('width',W).attr('height',H);
+  const g = svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+  const x = d3.scaleLinear().domain([1995,2024]).range([0,w]);
+  const y = d3.scaleLinear().domain([0,50]).range([h,0]);
+  const textColor = cssVar('--text');
+  const mutedColor = cssVar('--muted');
+  const usColor = cssVar('--us');
+
+  [0,10,20,30,40,50].forEach(v=>{
+    g.append('line').attr('x1',0).attr('x2',w).attr('y1',y(v)).attr('y2',y(v))
+      .attr('stroke','rgba(42,31,26,.06)').attr('stroke-dasharray','3,4');
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end')
+      .attr('fill',mutedColor).attr('font-family','IBM Plex Mono, monospace')
+      .attr('font-size',10).text(v+'M');
+  });
+  [1995,2000,2005,2010,2015,2020,2024].forEach(yr=>{
+    g.append('text').attr('x',x(yr)).attr('y',h+18).attr('text-anchor','middle')
+      .attr('fill',mutedColor).attr('font-family','IBM Plex Mono, monospace')
+      .attr('font-size',10).text(yr);
+  });
+
+  const area = d3.area().x(d=>x(d.year)).y0(h).y1(d=>y(d.m)).curve(d3.curveMonotoneX);
+  const line = d3.line().x(d=>x(d.year)).y(d=>y(d.m)).curve(d3.curveMonotoneX);
+  const grad = svg.append('defs').append('linearGradient')
+    .attr('id','partGrad').attr('x1',0).attr('y1',0).attr('x2',0).attr('y2',1);
+  grad.append('stop').attr('offset','0%').attr('stop-color',usColor).attr('stop-opacity',.4);
+  grad.append('stop').attr('offset','100%').attr('stop-color',usColor).attr('stop-opacity',.05);
+
+  const areaPath = g.append('path').datum(participantsData).attr('fill','url(#partGrad)')
+    .attr('d',area).attr('opacity',0);
+  areaPath.transition().duration(900).attr('opacity',1);
+
+  const linePath = g.append('path').datum(participantsData).attr('fill','none')
+    .attr('stroke',usColor).attr('stroke-width',2).attr('d',line);
+  const totalLen = linePath.node().getTotalLength();
+  linePath.attr('stroke-dasharray',totalLen).attr('stroke-dashoffset',totalLen)
+    .transition().duration(1100).attr('stroke-dashoffset',0);
+
+  // endpoint label
+  const last = participantsData[participantsData.length-1];
+  g.append('text').attr('x',x(last.year)-6).attr('y',y(last.m)-12)
+    .attr('text-anchor','end').attr('fill',textColor)
+    .attr('font-family','Instrument Serif, serif').attr('font-size',20).attr('font-weight',400)
+    .text('~'+last.m+'M').attr('opacity',0)
+    .transition().delay(1000).duration(400).attr('opacity',1);
+}
+
+function drawPerCapita(){
+  const cont = document.getElementById('per-capita-bars');
+  cont.innerHTML = '';
+  const max = perCapitaData[0].val;
+  perCapitaData.forEach((d,i)=>{
+    const pct = (d.val/max*100).toFixed(0);
+    const row = document.createElement('div');
+    row.className = 'cost-row';
+    const fill = cssVar(d.varName);
+    row.innerHTML = `
+      <div class="cost-lbl">${d.label}</div>
+      <div class="cost-track">
+        <div class="cost-fill" style="background:${fill}"><span>${d.val.toFixed(1)}</span></div>
+      </div>
+    `;
+    cont.appendChild(row);
+    setTimeout(()=>{
+      row.classList.add('vis');
+      setTimeout(()=>{ row.querySelector('.cost-fill').style.width = pct+'%'; }, 100);
+    }, i*110);
+  });
+}
+
 /* ============ ECONOMICS + PHASE CHARTS ============ */
 const costData = [
   {label:'🇺🇸 United States',  cost:41413, cls:'cf-us'},
@@ -812,13 +930,15 @@ const chartObserver = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(!e.isIntersecting) return;
     const id = e.target.id;
+    if(id==='participants-chart'){ drawParticipants(); chartObserver.unobserve(e.target); }
+    if(id==='per-capita-bars'){ drawPerCapita(); chartObserver.unobserve(e.target); }
     if(id==='cost-bars'){ drawCost(); chartObserver.unobserve(e.target); }
     if(id==='recruit-chart'){ drawRecruit(); chartObserver.unobserve(e.target); }
     if(id==='phase-grid'){ drawPhases(); chartObserver.unobserve(e.target); }
     if(id==='phase-chart'){ drawPhaseChart(); chartObserver.unobserve(e.target); }
   });
 }, {threshold:0.2});
-['cost-bars','recruit-chart','phase-grid','phase-chart'].forEach(id=>{
+['participants-chart','per-capita-bars','cost-bars','recruit-chart','phase-grid','phase-chart'].forEach(id=>{
   const el = document.getElementById(id);
   if(el) chartObserver.observe(el);
 });
